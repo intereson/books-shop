@@ -3,47 +3,47 @@ package by.intereson.ebookservice.entities;
 import by.intereson.ebookservice.enums.StatusOrder;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static by.intereson.ebookservice.utils.Constance.*;
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.FetchType.EAGER;
-import static jakarta.persistence.GenerationType.AUTO;
+import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
 @Data
 @Entity
 @Builder
+@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = ORDER)
+@Table(name = "ORDERS")
 public class Order {
+    private static final String SEQ_NAME = "ORDER_SEQ";
+
     @Id
-    @GeneratedValue(strategy = AUTO)
-    private long id;
-    @Column(name = TOTAL_PRICE)
-    private double totalPrice;
-    @Column(name = CREATION_DATE_TIME)
-    private LocalDateTime creationDateTime;
-    @Column(name = UPDATE_DATE_TIME)
+    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
+    private Long id;
+
+    @CreationTimestamp
+    @Column(name = "CREATE_DATE_TIME")
+    private LocalDateTime createDateTime;
+    @UpdateTimestamp
+    @Column(name = "UPDATE_DATE_TIME")
     private LocalDateTime updateDateTime;
     @Enumerated(STRING)
     private StatusOrder statusOrder;
 
-    @ManyToMany(fetch = EAGER)
-    @JoinTable(name = ORDER_BOOK,
-            joinColumns = {@JoinColumn(name = ORDER_ID)},
-            inverseJoinColumns = {@JoinColumn(name = BOOK_ID)})
-    private List<Book> booksByOrder;
-
     @ManyToOne
-    @JoinColumn(name = USER_ID)
+    @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToOne(mappedBy = "order")
-    private ShoppingCart shoppingCart;
+    @OneToMany(cascade = ALL,mappedBy = "order")
+    private List<PartOfTheOrder> parts;
 
 }

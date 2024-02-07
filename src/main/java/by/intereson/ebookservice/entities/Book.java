@@ -3,50 +3,47 @@ package by.intereson.ebookservice.entities;
 import by.intereson.ebookservice.enums.Genre;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.List;
 
-import static by.intereson.ebookservice.utils.Constance.*;
-
 import static jakarta.persistence.EnumType.STRING;
-import static jakarta.persistence.GenerationType.AUTO;
+import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
 @Entity
 @Builder
 @ToString
-@NoArgsConstructor
 @EqualsAndHashCode
+@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = BOOK)
+@Table(name = "BOOKS")
 public class Book {
+    private static final String SEQ_NAME = "book_seq";
+
     @Id
-    @GeneratedValue(strategy = AUTO)
-    private long id;
-    @Column(name = BOOK_NAME,nullable = false)
+    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
+    private Long id;
+    @Column(name = "BOOK_NAME", nullable = false)
     private String bookName;
-    @Column(name =AUTHOR,nullable = false)
+    @Column(name = "AUTHOR", nullable = false)
     private String author;
-    @Column(name = PUBLISHING_YEAR)
-    private int publishingYear;
-    @Column(name = PUBLISHING_HOUSE)
+    @Column(name = "PUBLISHING_YEAR")
+    private Integer publishingYear;
+    @Column(name = "PUBLISHING_HOUSE")
     private String publishingHouse;
-    @Column(name = NOTATION)
-    private String notation;
-    @Column(name = PRICE)
-    private double price;
-    @Column(name = DATE_OF_ADDITION)
+    @Column(name = "DESCRIPTION")
+    private String description;
+    @Column(name = "PRICE")
+    private Double price;
+    @CreationTimestamp
     private String dateTime;
 
     @Enumerated(STRING)
     private Genre genre;
 
-    @ManyToMany(mappedBy = "likedBooks")
-    private List<User> users;
-
-    @ManyToMany(mappedBy = "booksByOrder")
-    private List<Order> orders;
-
     @ManyToMany(mappedBy = "booksByShoppingCart")
     private List<ShoppingCart> shoppingCarts;
+
 }

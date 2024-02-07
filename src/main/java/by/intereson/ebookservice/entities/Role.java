@@ -5,23 +5,25 @@ import lombok.*;
 
 import java.util.List;
 
-import static by.intereson.ebookservice.utils.Constance.NAME;
-import static by.intereson.ebookservice.utils.Constance.ROLE;
-import static jakarta.persistence.GenerationType.AUTO;
+import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
 @Data
 @Entity
+@Builder
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = ROLE)
+@Table(name = "ROLES")
 public class Role {
+    private static final String SEQ_NAME = "ROLE_SEQ";
+
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
     private Long id;
-    @Column(name = NAME)
+    @Column(name = "NAME")
     private String name;
 
     @ManyToMany(mappedBy = "roleList")

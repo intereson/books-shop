@@ -5,32 +5,34 @@ import lombok.*;
 
 import java.util.List;
 
-import static by.intereson.ebookservice.utils.Constance.*;
-import static jakarta.persistence.GenerationType.AUTO;
+import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
 @Data
 @Entity
 @Builder
+@ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = SHOPPING_CART)
+@Table(name = "SHOPPING_CARTS")
 public class ShoppingCart {
-    @Id
-    @GeneratedValue(strategy = AUTO)
-    private long idShoppingCart;
+    private static final String SEQ_NAME="SHOPPING_CART_SEQ";
 
-    @ManyToMany
-    @JoinTable(name = SHOPPING_CART_BOOK,
-            joinColumns = {@JoinColumn(name = SHOPPING_CART_ID)},
-            inverseJoinColumns = {@JoinColumn(name = BOOK_ID)})
+    @Id
+    @GeneratedValue(strategy = SEQUENCE,generator = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME,sequenceName = SEQ_NAME)
+    private Long idShoppingCart;
+
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(name = "SHOPPING_CART_BOOK",
+            joinColumns = {@JoinColumn(name = "SHOPPING_CART_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "BOOK_ID")})
     private List<Book> booksByShoppingCart;
 
     @OneToOne(mappedBy = "shoppingCart")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = ORDER_ID)
-    private Order order;
+
 }
