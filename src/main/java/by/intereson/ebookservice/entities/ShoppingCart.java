@@ -6,6 +6,7 @@ import lombok.*;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
@@ -25,7 +26,7 @@ public class ShoppingCart {
     @SequenceGenerator(name = SEQ_NAME,sequenceName = SEQ_NAME)
     private Long idShoppingCart;
 
-    @ManyToMany(fetch = EAGER)
+    @ManyToMany(fetch = LAZY)
     @JoinTable(name = "SHOPPING_CART_BOOK",
             joinColumns = {@JoinColumn(name = "SHOPPING_CART_ID")},
             inverseJoinColumns = {@JoinColumn(name = "BOOK_ID")})

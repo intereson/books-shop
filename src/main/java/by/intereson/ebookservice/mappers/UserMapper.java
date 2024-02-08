@@ -1,28 +1,25 @@
 package by.intereson.ebookservice.mappers;
 
+import by.intereson.ebookservice.dto.UserDTO;
 import by.intereson.ebookservice.dto.requests.CreateUserRequest;
-import by.intereson.ebookservice.entities.ShoppingCart;
 import by.intereson.ebookservice.entities.User;
-import org.springframework.stereotype.Component;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
+@Mapper(componentModel = "spring", uses = {RoleListMapper.class})
+public interface UserMapper {
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-@Component
-public class UserMapper {
+        @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "surname", source = "surname")
+    @Mapping(target = "email", source = "email")
+        @Mapping(target = "roleList", source = "roleList")
 
-    public User mapToUser(CreateUserRequest request) {
-        return User.builder()
-                .name(request.getName())
-                .surname(request.getSurname())
-                .email(request.getEmail())
-                .login(request.getLogin())
-                .password(request.getPassword())
-                .roleList(new ArrayList<>())
-                .shoppingCart(new ShoppingCart())
-                .orders(new ArrayList<>())
-                .likedBooks(new ArrayList<>())
-                .build();
-    }
+    UserDTO mapToDTO(User user);
 
-
+    User mapToEntity(CreateUserRequest request);
 }

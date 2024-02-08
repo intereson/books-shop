@@ -7,8 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
@@ -40,17 +40,17 @@ public class User {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createDateTime;
 
-    @ManyToMany(fetch = EAGER)
+    @ManyToMany(fetch = EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
     private List<Role> roleList;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = EAGER)
+    @OneToOne(cascade = CascadeType.ALL,fetch = LAZY)
     @JoinColumn(name = "SHOPPING_CART_ID")
     private ShoppingCart shoppingCart;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = EAGER)
+    @OneToMany(cascade = CascadeType.ALL,fetch = LAZY)
     private List<Order> orders;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = EAGER)

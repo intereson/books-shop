@@ -23,9 +23,9 @@ public class Role {
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
     private Long id;
-    @Column(name = "NAME")
+    @Column(name = "NAME",unique = true,nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roleList")
+    @ManyToMany(mappedBy = "roleList",fetch = FetchType.LAZY)
     private List<User> users;
 }

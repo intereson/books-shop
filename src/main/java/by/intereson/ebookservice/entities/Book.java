@@ -39,9 +39,10 @@ public class Book {
     private Double price;
     @CreationTimestamp
     private String dateTime;
-
     @Enumerated(STRING)
     private Genre genre;
+    @Column(name = "QUANTITY")
+    private Integer quantity;
 
     @ManyToMany(mappedBy = "booksByShoppingCart")
     private List<ShoppingCart> shoppingCarts;
