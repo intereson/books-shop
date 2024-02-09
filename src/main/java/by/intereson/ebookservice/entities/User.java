@@ -40,17 +40,17 @@ public class User {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createDateTime;
 
-    @ManyToMany(fetch = EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = EAGER)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
     private List<Role> roleList;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = LAZY)
-    @JoinColumn(name = "SHOPPING_CART_ID")
+    @OneToOne(cascade = CascadeType.ALL,fetch = EAGER)
+    @JoinColumn(name = "SHOPPING_CART_ID",nullable = false)
     private ShoppingCart shoppingCart;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Order> orders;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = EAGER)

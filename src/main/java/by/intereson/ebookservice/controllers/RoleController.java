@@ -1,7 +1,7 @@
 package by.intereson.ebookservice.controllers;
 
-import by.intereson.ebookservice.dto.RoleDTO;
-import by.intereson.ebookservice.dto.requests.CreateRoleRequest;
+import by.intereson.ebookservice.dto.requests.RoleRequest;
+import by.intereson.ebookservice.dto.response.RoleDTO;
 import by.intereson.ebookservice.entities.Role;
 import by.intereson.ebookservice.mappers.RoleMapper;
 import by.intereson.ebookservice.services.RoleService;
@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping("api/v1/admin")
 public class RoleController {
     private final RoleService roleService;
-    private final RoleMapper roleMapper;
 
     @DeleteMapping("role/{id}")
     public ResponseEntity<String> deleteRole(@PathVariable Long id) {
@@ -40,7 +39,7 @@ public class RoleController {
     @GetMapping("role/{name}")
     public ResponseEntity<RoleDTO> getRole(@PathVariable String name) {
         Role role = roleService.getRoleByName(name);
-        RoleDTO roleDTO = roleMapper.mapToDTO(role);
+        RoleDTO roleDTO = RoleMapper.INSTANCE.mapToDTO(role);
         return new ResponseEntity<>(roleDTO, HttpStatus.OK);
     }
 
@@ -51,10 +50,8 @@ public class RoleController {
     }
 
     @PostMapping("role")
-    public ResponseEntity<RoleDTO> saveRole(@RequestBody CreateRoleRequest request) {
-        Role role = roleService.saveRole(request);
-        RoleDTO roleDTO = RoleMapper.INSTANCE.mapToDTO(role);
-        return ResponseEntity.ok(roleDTO);
+    public ResponseEntity<String> saveRole(@RequestBody RoleRequest request) {
+        roleService.saveRole(request);
+        return ResponseEntity.ok("Done");
     }
-
 }

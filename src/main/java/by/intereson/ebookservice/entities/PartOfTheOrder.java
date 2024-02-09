@@ -3,7 +3,7 @@ package by.intereson.ebookservice.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
@@ -26,10 +26,9 @@ public class PartOfTheOrder {
     @Column(name = "QUANTITY")
     private Integer quantity;
     @ManyToOne
-    @JoinColumn(name = "ORDER_ID")
+    @JoinColumn(name = "ORDER_ID", nullable = false)
     private Order order;
-    @ManyToOne(fetch = EAGER)
-    @JoinColumn(name = "BOOK_ID")
+    @ManyToOne
+    @JoinColumn(name = "BOOK_ID", nullable = false)
     private Book book;
-
 }

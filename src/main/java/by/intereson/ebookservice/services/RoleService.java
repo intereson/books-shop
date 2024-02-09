@@ -1,7 +1,7 @@
 package by.intereson.ebookservice.services;
 
-import by.intereson.ebookservice.dto.RoleDTO;
-import by.intereson.ebookservice.dto.requests.CreateRoleRequest;
+import by.intereson.ebookservice.dto.response.RoleDTO;
+import by.intereson.ebookservice.dto.requests.RoleRequest;
 import by.intereson.ebookservice.entities.Role;
 
 import java.util.List;
@@ -12,5 +12,5 @@ public interface RoleService {
     List<RoleDTO> getRoles();
     RoleDTO getRoleById(Long id);
     Role getRoleByName(String name);
-    Role saveRole(CreateRoleRequest request);
+    void saveRole(RoleRequest request);
 }

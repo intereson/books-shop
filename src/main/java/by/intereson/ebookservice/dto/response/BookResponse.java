@@ -1,4 +1,4 @@
-package by.intereson.ebookservice.dto;
+package by.intereson.ebookservice.dto.response;
 
 import by.intereson.ebookservice.enums.Genre;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDTO {
+public class BookResponse {
     private Long id;
     private String bookName;
     private String author;

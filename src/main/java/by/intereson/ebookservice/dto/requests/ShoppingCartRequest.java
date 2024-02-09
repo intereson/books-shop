@@ -1,16 +1,15 @@
 package by.intereson.ebookservice.dto.requests;
 
+import by.intereson.ebookservice.entities.Book;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUserRequest {
-    private String name;
-    private String surname;
-    private String email;
-    private String login;
-    private String password;
+public class ShoppingCartRequest {
+    private Long idBook;
 }

@@ -1,4 +1,4 @@
-package by.intereson.ebookservice.dto;
+package by.intereson.ebookservice.dto.response;
 
 import by.intereson.ebookservice.entities.Book;
 import by.intereson.ebookservice.entities.Order;

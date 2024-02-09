@@ -26,7 +26,7 @@ public class ShoppingCart {
     @SequenceGenerator(name = SEQ_NAME,sequenceName = SEQ_NAME)
     private Long idShoppingCart;
 
-    @ManyToMany(fetch = LAZY)
+    @ManyToMany(fetch = EAGER)
     @JoinTable(name = "SHOPPING_CART_BOOK",
             joinColumns = {@JoinColumn(name = "SHOPPING_CART_ID")},
             inverseJoinColumns = {@JoinColumn(name = "BOOK_ID")})
@@ -34,6 +34,4 @@ public class ShoppingCart {
 
     @OneToOne(mappedBy = "shoppingCart")
     private User user;
-
-
 }
