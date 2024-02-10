@@ -13,8 +13,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Entity
 @Builder
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "BOOKS")
@@ -43,8 +41,7 @@ public class Book {
     private Genre genre;
     @Column(name = "QUANTITY")
     private Integer quantity;
-
-    @ManyToMany(mappedBy = "booksByShoppingCart")
-    private List<ShoppingCart> shoppingCarts;
+    @ManyToOne
+    private User user;
 
 }

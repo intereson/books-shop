@@ -1,36 +1,34 @@
 package by.intereson.ebookservice.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.EAGER;
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
 @Data
 @Entity
 @Builder
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "SHOPPING_CARTS")
 public class ShoppingCart {
-    private static final String SEQ_NAME="SHOPPING_CART_SEQ";
+    private static final String SEQ_NAME = "SHOPPING_CART_SEQ";
 
     @Id
-    @GeneratedValue(strategy = SEQUENCE,generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME,sequenceName = SEQ_NAME)
+    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
     private Long idShoppingCart;
 
-    @ManyToMany(fetch = EAGER)
-    @JoinTable(name = "SHOPPING_CART_BOOK",
-            joinColumns = {@JoinColumn(name = "SHOPPING_CART_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "BOOK_ID")})
-    private List<Book> booksByShoppingCart;
+    @OneToMany(mappedBy = "shoppingCart",fetch = EAGER)
+    private List<PartOfTheOrder> parts;
 
     @OneToOne(mappedBy = "shoppingCart")
     private User user;

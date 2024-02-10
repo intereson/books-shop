@@ -1,13 +1,13 @@
 package by.intereson.ebookservice.controllers;
 
-import by.intereson.ebookservice.dto.response.UserDTO;
 import by.intereson.ebookservice.dto.requests.CreateUserRequest;
-import by.intereson.ebookservice.entities.User;
-import by.intereson.ebookservice.mappers.UserMapper;
+import by.intereson.ebookservice.dto.response.UserResponse;
 import by.intereson.ebookservice.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,16 +18,30 @@ public class UserController {
 
     @GetMapping("user/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUser(@PathVariable Long id) {
-        User user = userService.getUser(id);
-        return UserMapper.INSTANCE.mapToDTO(user);
+    public UserResponse getUser(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
+    @GetMapping("users")
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserResponse> getAllUsers(){
+        return userService.getAllUsers();
+    }
+    @PutMapping("user/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse updateUser(@PathVariable Long id,@RequestBody CreateUserRequest request){
+        return userService.updateUser(id,request);
+    }
+    @DeleteMapping("user/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
     }
 
     @PostMapping("user")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO saveUser(@RequestBody CreateUserRequest request) {
-        User user = userService.saveUser(request);
-        return UserMapper.INSTANCE.mapToDTO(user);
+    public UserResponse saveUser(@RequestBody CreateUserRequest request) {
+        return userService.saveUser(request);
     }
+
 
 }

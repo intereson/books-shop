@@ -1,6 +1,6 @@
 package by.intereson.ebookservice.mappers;
 
-import by.intereson.ebookservice.dto.response.UserDTO;
+import by.intereson.ebookservice.dto.response.UserResponse;
 import by.intereson.ebookservice.dto.requests.CreateUserRequest;
 import by.intereson.ebookservice.entities.User;
 import org.mapstruct.BeanMapping;
@@ -17,9 +17,8 @@ public interface UserMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "surname", source = "surname")
     @Mapping(target = "email", source = "email")
-        @Mapping(target = "roleList", source = "roleList")
-
-    UserDTO mapToDTO(User user);
+//        @Mapping(target = "roleList", source = "roleList")
+        UserResponse mapToDTO(User user);
     @BeanMapping(ignoreByDefault = true)
 
     @Mapping(target = "name", source = "name")

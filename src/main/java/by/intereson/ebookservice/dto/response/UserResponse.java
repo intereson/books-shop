@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserResponse {
     private Long id;
     private String name;
     private String surname;
@@ -24,8 +24,8 @@ public class UserDTO {
     private String login;
     private String password;
     private LocalDateTime createDateTime;
-    private List<Role> roleList;
-    private ShoppingCart shoppingCart;
-    private List<Order> orders;
-    private List<Book> likedBooks;
+//    private List<Role> roleList;
+//    private ShoppingCart shoppingCart;
+//    private List<Order> orders;
+//    private List<Book> likedBooks;
 }

@@ -11,8 +11,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Entity
 @Builder
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ROLES")

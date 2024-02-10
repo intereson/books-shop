@@ -1,9 +1,14 @@
 package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreateUserRequest;
-import by.intereson.ebookservice.entities.User;
+import by.intereson.ebookservice.dto.response.UserResponse;
+
+import java.util.List;
 
 public interface UserService {
-    User getUser(Long id);
-    User saveUser(CreateUserRequest request);
+    UserResponse getUser(Long id);
+    List<UserResponse> getAllUsers();
+    UserResponse saveUser(CreateUserRequest request);
+    UserResponse updateUser(Long id, CreateUserRequest request);
+    void deleteUser(Long id);
 }

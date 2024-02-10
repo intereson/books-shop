@@ -1,6 +1,6 @@
 package by.intereson.ebookservice.controllers;
 
-import by.intereson.ebookservice.dto.requests.ShoppingCartRequest;
+import by.intereson.ebookservice.dto.requests.ShoppingCartAddPartRequest;
 import by.intereson.ebookservice.dto.response.ShoppingCartResponse;
 import by.intereson.ebookservice.services.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +28,13 @@ public class ShoppingCartController {
 
     @PostMapping("{id}/add")
     @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartResponse addBookInShoppingCart(@PathVariable Long id, @RequestBody ShoppingCartRequest request) {
-        return shoppingCartService.addBookInShoppingCart(id, request);
+    public ShoppingCartResponse addBookInShoppingCart(@PathVariable Long id, @RequestBody ShoppingCartAddPartRequest request) {
+        return shoppingCartService.addPartInShoppingCart(id, request);
     }
 
     @PostMapping("{id}/del")
     @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartResponse delBookFromShoppingCart(@PathVariable Long id, @RequestBody ShoppingCartRequest request) {
-        return shoppingCartService.deleteBookFromShoppingCart(id, request);
+    public ShoppingCartResponse delBookFromShoppingCart(@PathVariable Long id, @RequestBody ShoppingCartAddPartRequest request) {
+        return shoppingCartService.deletePartFromShoppingCart(id, request);
     }
 }

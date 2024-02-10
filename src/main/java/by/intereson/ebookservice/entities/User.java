@@ -1,12 +1,16 @@
 package by.intereson.ebookservice.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -14,8 +18,6 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Data
 @Entity
 @Builder
-@ToString
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "USERS")
@@ -25,7 +27,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = SEQUENCE,generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME,sequenceName = SEQ_NAME)
-    private Long id;
+        private Long id;
     @Column(name = "NAME", nullable = false)
     private String name;
     @Column(name = "FAMILY", nullable = false)
@@ -40,19 +42,19 @@ public class User {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createDateTime;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = EAGER)
+    @ManyToMany(cascade = PERSIST,fetch = EAGER)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
     private List<Role> roleList;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = EAGER)
-    @JoinColumn(name = "SHOPPING_CART_ID",nullable = false)
+    @OneToOne(cascade =ALL)
+    @JoinColumn(name = "SHOPPING_CART_ID")
     private ShoppingCart shoppingCart;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",fetch = EAGER)
     private List<Order> orders;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = EAGER)
+    @OneToMany(mappedBy = "user",fetch = EAGER)
     private List<Book> likedBooks;
 }

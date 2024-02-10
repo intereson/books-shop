@@ -1,19 +1,21 @@
 package by.intereson.ebookservice.dto.response;
 
 import by.intereson.ebookservice.entities.Book;
-import by.intereson.ebookservice.entities.PartOfTheOrder;
+import by.intereson.ebookservice.entities.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShoppingCartResponse {
-    private Long idShoppingCart;
-    private List<PartOfTheOrder> parts;
+public class PartResponse {
+    private Long id;
+    private Double Price;
     private Double sumPrice;
+    private Integer quantity;
+    private Order order;
+    private Book book;
 }
