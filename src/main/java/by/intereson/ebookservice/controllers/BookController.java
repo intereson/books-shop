@@ -20,6 +20,7 @@ public class BookController {
     public BookResponse getBook(@PathVariable Long id) {
         return bookService.getBookDTO(id);
     }
+
     @GetMapping("books")
     @ResponseStatus(HttpStatus.OK)
     public List<BookResponse> getAllBooksUnsorted() {
@@ -31,15 +32,16 @@ public class BookController {
     public BookResponse createBook(@RequestBody CreateBookRequest request) {
         return bookService.createBook(request);
     }
+
     @PutMapping("books/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse updateBook(@PathVariable Long id,@RequestBody CreateBookRequest request){
-        return bookService.updateBook(id,request);
-    }
-    @DeleteMapping("books/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable Long id){
-        bookService.deleteBook(id);
+    public BookResponse updateBook(@PathVariable Long id, @RequestBody CreateBookRequest request) {
+        return bookService.updateBook(id, request);
     }
 
+    @DeleteMapping("books/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+    }
 }

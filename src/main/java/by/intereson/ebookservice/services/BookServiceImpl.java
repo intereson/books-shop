@@ -22,9 +22,8 @@ public class BookServiceImpl implements BookService {
     private final BookListMapper bookListMapper;
 
     @Override
-    @Transactional(readOnly = true)
     public BookResponse getBookDTO(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
+        Book book = getBook(id);
         return bookMapper.mapToDTO(book);
     }
 
@@ -38,8 +37,8 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public Book getBook(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
-
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
     }
 
     @Override
@@ -60,8 +59,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public BookResponse updateBook(Long id, CreateBookRequest request) {
         Book newBook = bookMapper.mapToEntity(request);
-        Book oldBook = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
+        Book oldBook = getBook(id);
         oldBook.setBookName(newBook.getBookName());
         oldBook.setAuthor(newBook.getAuthor());
         oldBook.setPublishingYear(newBook.getPublishingYear());

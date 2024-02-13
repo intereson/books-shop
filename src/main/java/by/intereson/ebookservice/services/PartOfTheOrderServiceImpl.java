@@ -10,9 +10,10 @@ import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.mappers.PartOfTheOrderListMapper;
 import by.intereson.ebookservice.mappers.PartOfTheOrderMapper;
 import by.intereson.ebookservice.repositories.PartOfTheOrderRepository;
-import by.intereson.ebookservice.repositories.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,14 +21,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
+    private final PartOfTheOrderRepository partOfTheOrderRepository;
     private final PartOfTheOrderMapper partOfTheOrderMapper;
     private final PartOfTheOrderListMapper partOfTheOrderListMapper;
     private final BookService bookService;
     private final ShoppingCartService shoppingCartService;
-    private final PartOfTheOrderRepository partOfTheOrderRepository;
-    private final ShoppingCartRepository shoppingCartRepository;
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public PartResponse createPartOfTheOrder(CreatePartOfTheOrderRequest request) {
         PartOfTheOrder partOfTheOrder = partOfTheOrderMapper.mapToEntity(request);
         Book book = bookService.getBook(request.getIdBook());
@@ -39,12 +40,7 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
         Double sumPrise = price * quantity;
         partOfTheOrder.setSumPrice(sumPrise);
         partOfTheOrder.setQuantity(quantity);
-
-        ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(request.getIdShoppingCart());
-        Double shoppingCartSumPrice = shoppingCart.getSumPrice();
-        shoppingCartSumPrice = shoppingCartSumPrice + sumPrise;
-        shoppingCart.setSumPrice(shoppingCartSumPrice);
-
+        ShoppingCart shoppingCart = shoppingCartService.setSumPrice(request.getIdShoppingCart(), sumPrise);
         partOfTheOrder.setShoppingCart(shoppingCart);
         partOfTheOrderRepository.save(partOfTheOrder);
         return partOfTheOrderMapper.mapToDTO(partOfTheOrder);
@@ -56,6 +52,7 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PartOfTheOrder getPartOfTheOrder(Long id) {
         return partOfTheOrderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
@@ -67,11 +64,13 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PartOfTheOrder> getAllPartsOfTheOrder() {
         return partOfTheOrderRepository.findAll();
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public PartResponse updatePartOfTheOrder(Long id, UpdatePartOfTheOrderRequest request) {
         Integer newQuantity = request.getQuantity();
         PartOfTheOrder oldPartOfTheOrder = getPartOfTheOrder(id);
@@ -84,11 +83,13 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void deletePartOfTheOrder(Long id) {
         partOfTheOrderRepository.deleteById(id);
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void deleteAllPartsFromShoppingCart(Long userId) {
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(userId);
         List<PartOfTheOrder> parts = shoppingCart.getParts();

@@ -2,7 +2,10 @@ package by.intereson.ebookservice.entities;
 
 import by.intereson.ebookservice.enums.Genre;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.List;
@@ -21,7 +24,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME,allocationSize = 1)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
     private Long id;
     @Column(name = "BOOK_NAME", nullable = false)
     private String bookName;
@@ -41,7 +44,7 @@ public class Book {
     private Genre genre;
     @Column(name = "QUANTITY")
     private Integer quantity;
-    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "likedBooks")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "likedBooks")
     private List<User> users;
 
 }

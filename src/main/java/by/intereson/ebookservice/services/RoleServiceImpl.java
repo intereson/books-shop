@@ -1,7 +1,7 @@
 package by.intereson.ebookservice.services;
 
+import by.intereson.ebookservice.dto.requests.CreateRoleRequest;
 import by.intereson.ebookservice.dto.response.RoleResponse;
-import by.intereson.ebookservice.dto.requests.RoleRequest;
 import by.intereson.ebookservice.entities.Role;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.mappers.RoleListMapper;
@@ -59,7 +59,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public RoleResponse saveRole(RoleRequest request) {
+    public RoleResponse saveRole(CreateRoleRequest request) {
         Role role = roleMapper.mapToEntity(request);
         roleRepository.save(role);
         return roleMapper.mapToDTO(role);

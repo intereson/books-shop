@@ -19,7 +19,7 @@ public class OrderController {
     @GetMapping("orders/{id}")
     @ResponseStatus(HttpStatus.OK)
     public OrderResponse getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id);
+        return orderService.getOrderByIdDTO(id);
     }
 
     @GetMapping("orders")
@@ -43,7 +43,7 @@ public class OrderController {
     @PatchMapping("orders/{id}")
     @ResponseStatus(HttpStatus.OK)
     public OrderResponse patchOrderStatus(@PathVariable Long id, @RequestBody OrderStatus status) {
-        return orderService.patchOrderStatus(id,status);
+        return orderService.patchOrderStatus(id, status);
     }
 
     @DeleteMapping("orders/{id}")
@@ -51,5 +51,4 @@ public class OrderController {
     public void deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
     }
-
 }

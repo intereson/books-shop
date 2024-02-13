@@ -1,9 +1,5 @@
 package by.intereson.ebookservice.dto.response;
 
-import by.intereson.ebookservice.entities.Book;
-import by.intereson.ebookservice.entities.Order;
-import by.intereson.ebookservice.entities.Role;
-import by.intereson.ebookservice.entities.ShoppingCart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +21,6 @@ public class UserResponse {
     private String password;
     private LocalDateTime createDateTime;
     private List<RoleResponse> roleList;
-//    private ShoppingCartResponse shoppingCart;
     private List<OrderResponse> orders;
     private List<BookResponse> likedBooks;
 }

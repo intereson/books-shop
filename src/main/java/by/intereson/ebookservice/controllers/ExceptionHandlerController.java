@@ -21,7 +21,7 @@ public class ExceptionHandlerController {
         log.error("Exception:{}", exception.getMessage());
         return ErrorResponse.builder()
                 .message(exception.getMessage())
-                .error("По вашему запросу в базу данных произошла ошибка")
+                .error("An error has occurred in your database query! The resource was not found!")
                 .localDateTime(LocalDateTime.now())
                 .build();
     }

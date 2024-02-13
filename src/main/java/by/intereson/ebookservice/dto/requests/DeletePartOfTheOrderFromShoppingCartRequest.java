@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleRequest {
-    private String name;
+public class DeletePartOfTheOrderFromShoppingCartRequest {
+    private Long idPartOfTheOrder;
 }

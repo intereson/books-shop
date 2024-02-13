@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-
     BookResponse mapToDTO(Book book);
 
     Book mapToEntity(CreateBookRequest request);

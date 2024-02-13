@@ -1,14 +1,17 @@
 package by.intereson.ebookservice.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -20,12 +23,12 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @AllArgsConstructor
 @Table(name = "USERS")
 public class User {
-    private static final String SEQ_NAME="USER_SEQ";
+    private static final String SEQ_NAME = "USER_SEQ";
 
     @Id
-    @GeneratedValue(strategy = SEQUENCE,generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME,sequenceName = SEQ_NAME,allocationSize = 1)
-        private Long id;
+    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
+    private Long id;
     @Column(name = "NAME", nullable = false)
     private String name;
     @Column(name = "FAMILY", nullable = false)
@@ -40,21 +43,21 @@ public class User {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createDateTime;
 
-    @ManyToMany(cascade = PERSIST,fetch = LAZY)
+    @ManyToMany(cascade = PERSIST, fetch = LAZY)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
     private List<Role> roleList;
 
-    @OneToOne(cascade ={PERSIST,REMOVE},fetch = LAZY)
+    @OneToOne(cascade = {PERSIST, REMOVE}, fetch = LAZY)
     @JoinColumn(name = "SHOPPING_CART_ID")
     private ShoppingCart shoppingCart;
 
-    @OneToMany(mappedBy = "user",fetch = LAZY)
+    @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<Order> orders;
 
     @ManyToMany(fetch = LAZY)
-           @JoinTable (name = "USER_LIKE_BOOK",
+    @JoinTable(name = "USER_LIKE_BOOK",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "BOOK_ID")})
     private List<Book> likedBooks;

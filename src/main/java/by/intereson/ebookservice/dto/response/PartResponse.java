@@ -1,7 +1,5 @@
 package by.intereson.ebookservice.dto.response;
 
-import by.intereson.ebookservice.entities.Book;
-import by.intereson.ebookservice.entities.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -15,31 +15,34 @@ import java.util.List;
 @RequestMapping("api/v1")
 public class PartOfTheOrderController {
     private final PartOfTheOrderService partOfTheOrderService;
+
     @GetMapping("parts-of-the-order/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PartResponse getPartOfTheOrder(@PathVariable Long id) {
         return partOfTheOrderService.getPartOfTheOrderDTO(id);
     }
+
     @GetMapping("parts-of-the-order")
     @ResponseStatus(HttpStatus.OK)
     public List<PartResponse> getPartsOfTheOrder() {
         return partOfTheOrderService.getAllPartsOfTheOrderDTO();
     }
+
     @PostMapping("parts-of-the-order")
     @ResponseStatus(HttpStatus.CREATED)
     public PartResponse createPartOfTheOrder(@RequestBody CreatePartOfTheOrderRequest request) {
         return partOfTheOrderService.createPartOfTheOrder(request);
     }
+
     @PatchMapping("parts-of-the-order/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PartResponse updatePartOfTheOrder(@PathVariable Long id,@RequestBody UpdatePartOfTheOrderRequest request){
-        return partOfTheOrderService.updatePartOfTheOrder(id,request);
+    public PartResponse updatePartOfTheOrder(@PathVariable Long id, @RequestBody UpdatePartOfTheOrderRequest request) {
+        return partOfTheOrderService.updatePartOfTheOrder(id, request);
     }
-
 
     @DeleteMapping("parts-of-the-order/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePartsOfTheOrder(@PathVariable Long id){
+    public void deletePartsOfTheOrder(@PathVariable Long id) {
         partOfTheOrderService.deletePartOfTheOrder(id);
     }
 }

@@ -1,6 +1,6 @@
 package by.intereson.ebookservice.controllers;
 
-import by.intereson.ebookservice.dto.requests.RoleRequest;
+import by.intereson.ebookservice.dto.requests.CreateRoleRequest;
 import by.intereson.ebookservice.dto.response.RoleResponse;
 import by.intereson.ebookservice.entities.Role;
 import by.intereson.ebookservice.services.RoleService;
@@ -42,7 +42,7 @@ public class RoleController {
 
     @PostMapping("roles")
     @ResponseStatus(HttpStatus.CREATED)
-    public RoleResponse saveRole(@RequestBody RoleRequest request) {
+    public RoleResponse saveRole(@RequestBody CreateRoleRequest request) {
         return roleService.saveRole(request);
     }
 }

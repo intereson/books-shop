@@ -1,7 +1,5 @@
 package by.intereson.ebookservice.dto.response;
 
-import by.intereson.ebookservice.entities.PartOfTheOrder;
-import by.intereson.ebookservice.entities.User;
 import by.intereson.ebookservice.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +19,5 @@ public class OrderResponse {
     private LocalDateTime updateDateTime;
     private OrderStatus orderStatus;
     private Double sumPrice;
-//    private User user;
     private List<PartResponse> parts;
 }

@@ -11,17 +11,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import static by.intereson.ebookservice.utils.Constants.LOG_REQUEST_PATTERN;
+import static by.intereson.ebookservice.utils.Constants.LOG_RESPONSE_PATTERN;
+
 @Slf4j
 @Aspect
 @Component
 public class LoggerAspect {
-    private static final String LOG_REQUEST_PATTERN = "{}->{}:{} - {}";
-    private static final String LOG_RESPONSE_PATTERN = "{}->{}:{},response {}";
+
 
     @Pointcut("execution(* by.intereson.ebookservice.controllers..*(..))")
     public void pointCut() {
-
     }
+
     @Before("pointCut()")
     public void logRequest(JoinPoint joinPoint) {
         HttpServletRequest servletRequest = getServletRequest();
@@ -31,8 +33,9 @@ public class LoggerAspect {
                 joinPoint.getArgs(),
                 servletRequest.getRequestURI());
     }
-    @AfterReturning(value = "pointCut()",returning = "response")
-    public void logResponse(JoinPoint joinPoint,Object response){
+
+    @AfterReturning(value = "pointCut()", returning = "response")
+    public void logResponse(JoinPoint joinPoint, Object response) {
         HttpServletRequest servletRequest = getServletRequest();
         log.info(LOG_RESPONSE_PATTERN,
                 servletRequest.getMethod(),
@@ -40,7 +43,8 @@ public class LoggerAspect {
                 servletRequest.getRequestURI(),
                 response);
     }
-    private HttpServletRequest getServletRequest(){
+
+    private HttpServletRequest getServletRequest() {
         return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     }
 }

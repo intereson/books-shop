@@ -9,7 +9,6 @@ import by.intereson.ebookservice.entities.User;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.mappers.UserListMapper;
 import by.intereson.ebookservice.mappers.UserMapper;
-import by.intereson.ebookservice.repositories.BookRepository;
 import by.intereson.ebookservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,11 +28,16 @@ public class UserServiceImpl implements UserService {
     private final BookService bookService;
 
     @Override
-    @Transactional(readOnly = true)
-    public UserResponse getUser(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
+    public UserResponse getUserDTO(Long id) {
+        User user = getUser(id);
         return userMapper.mapToDTO(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
     }
 
     @Override
@@ -46,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public UserResponse saveUser(CreateUserRequest request) {
-        User user = userMapper.mapToEntity(request);//todo
+        User user = userMapper.mapToEntity(request);
         Role role = roleService.getRoleByName("USER");
         user.setRoleList(new ArrayList<>());
         user.getRoleList().add(0, role);
@@ -63,8 +67,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public UserResponse updateUser(Long id, CreateUserRequest request) {
         User newUser = userMapper.mapToEntity(request);
-        User oldUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
+        User oldUser = getUser(id);
         oldUser.setName(newUser.getName());
         oldUser.setSurname(newUser.getSurname());
         oldUser.setEmail(newUser.getEmail());
@@ -75,16 +78,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public UserResponse updateLikedBooksByUser(Long id, UpdateLikedBooksByUserRequest request) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
+        User user = getUser(id);
         long count = user.getLikedBooks().stream().filter((p) -> p.getId().equals(request.getIdBook())).count();
-        if(count==0){
+        if (count == 0) {
             user.getLikedBooks().add(bookService.getBook(request.getIdBook()));
             userRepository.save(user);
         }
 //        else {
-//            new Exception("is present");
+//            new Exception("is present");//todo exception
 //        }
         return userMapper.mapToDTO(user);
     }
