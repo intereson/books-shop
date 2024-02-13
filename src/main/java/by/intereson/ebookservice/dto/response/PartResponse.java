@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PartResponse {
     private Long id;
-    private Double Price;
+    private Double price;
     private Double sumPrice;
     private Integer quantity;
-    private Order order;
-    private Book book;
+    private String bookName;
+
 }

@@ -5,7 +5,7 @@ import by.intereson.ebookservice.entities.PartOfTheOrder;
 import by.intereson.ebookservice.entities.ShoppingCart;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {PartOfTheOrder.class})
+@Mapper(componentModel = "spring", uses = {PartOfTheOrderListMapper.class})
 public interface ShoppingCartMapper {
 
     ShoppingCartResponse mapToDTO(ShoppingCart shoppingCart);

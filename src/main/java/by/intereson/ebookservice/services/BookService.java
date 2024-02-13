@@ -10,7 +10,7 @@ public interface BookService {
     BookResponse getBookDTO(Long id);
     List<BookResponse> getAllBooksUnsortedDTO();
     Book getBook(Long id);
-    BookResponse saveBook(CreateBookRequest request);
+    BookResponse createBook(CreateBookRequest request);
     void deleteBook(Long id);
     BookResponse updateBook(Long id, CreateBookRequest request);
 }

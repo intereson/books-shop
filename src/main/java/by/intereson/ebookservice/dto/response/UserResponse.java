@@ -24,8 +24,8 @@ public class UserResponse {
     private String login;
     private String password;
     private LocalDateTime createDateTime;
-//    private List<Role> roleList;
-//    private ShoppingCart shoppingCart;
-//    private List<Order> orders;
-//    private List<Book> likedBooks;
+    private List<RoleResponse> roleList;
+//    private ShoppingCartResponse shoppingCart;
+    private List<OrderResponse> orders;
+    private List<BookResponse> likedBooks;
 }

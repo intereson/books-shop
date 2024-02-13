@@ -16,19 +16,19 @@ import java.util.List;
 public class RoleController {
     private final RoleService roleService;
 
-    @DeleteMapping("role/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("roles/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRole(@PathVariable Long id) {
         roleService.delete(id);
     }
 
-    @PutMapping("role/{id}/update")
+    @PutMapping("roles/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RoleResponse updateRole(@PathVariable Long id, @RequestBody Role roleDetails) {
         return roleService.updateRole(id, roleDetails);
     }
 
-    @GetMapping("role/{id}")
+    @GetMapping("roles/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RoleResponse getRole(@PathVariable Long id) {
         return roleService.getRoleById(id);
@@ -40,7 +40,8 @@ public class RoleController {
         return roleService.getRoles();
     }
 
-    @PostMapping("role")
+    @PostMapping("roles")
+    @ResponseStatus(HttpStatus.CREATED)
     public RoleResponse saveRole(@RequestBody RoleRequest request) {
         return roleService.saveRole(request);
     }

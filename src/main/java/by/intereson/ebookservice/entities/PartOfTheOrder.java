@@ -18,7 +18,7 @@ public class PartOfTheOrder {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME,allocationSize = 1)
     private Long id;
     @Column(name = "SUM_PRICE")
     private Double sumPrice;
@@ -26,13 +26,15 @@ public class PartOfTheOrder {
     private Double price;
     @Column(name = "QUANTITY")
     private Integer quantity;
-    @ManyToOne
+    @Column(name = "BOOK_NAME")
+    private String bookName;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORDER_ID")
     private Order order;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOOK_ID")
     private Book book;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SHOPPING_CART_ID")
     private ShoppingCart shoppingCart;
 }

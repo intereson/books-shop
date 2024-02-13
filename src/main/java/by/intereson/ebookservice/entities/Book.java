@@ -21,7 +21,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME,allocationSize = 1)
     private Long id;
     @Column(name = "BOOK_NAME", nullable = false)
     private String bookName;
@@ -41,7 +41,7 @@ public class Book {
     private Genre genre;
     @Column(name = "QUANTITY")
     private Integer quantity;
-    @ManyToOne
-    private User user;
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "likedBooks")
+    private List<User> users;
 
 }

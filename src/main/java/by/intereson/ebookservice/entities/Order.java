@@ -1,6 +1,6 @@
 package by.intereson.ebookservice.entities;
 
-import by.intereson.ebookservice.enums.StatusOrder;
+import by.intereson.ebookservice.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -28,7 +28,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME,allocationSize = 1)
     private Long id;
 
     @CreationTimestamp
@@ -38,13 +38,13 @@ public class Order {
     @Column(name = "UPDATE_DATE_TIME")
     private LocalDateTime updateDateTime;
     @Enumerated(STRING)
-    private StatusOrder statusOrder;
+    private OrderStatus orderStatus;
     @Column(name = "SUM_PRICES")
     private Double sumPrice;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
-    @OneToMany(mappedBy = "order",cascade = ALL)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "order",cascade = REMOVE)
     private List<PartOfTheOrder> parts;
 
 }

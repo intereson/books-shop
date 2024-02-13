@@ -15,7 +15,7 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    @GetMapping("book/{id}")
+    @GetMapping("books/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BookResponse getBook(@PathVariable Long id) {
         return bookService.getBookDTO(id);
@@ -26,18 +26,18 @@ public class BookController {
         return bookService.getAllBooksUnsortedDTO();
     }
 
-    @PostMapping("book")
+    @PostMapping("books")
     @ResponseStatus(HttpStatus.CREATED)
-    public BookResponse saveBook(@RequestBody CreateBookRequest request) {
-        return bookService.saveBook(request);
+    public BookResponse createBook(@RequestBody CreateBookRequest request) {
+        return bookService.createBook(request);
     }
-    @PutMapping("book/{id}")
+    @PutMapping("books/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BookResponse updateBook(@PathVariable Long id,@RequestBody CreateBookRequest request){
         return bookService.updateBook(id,request);
     }
-    @DeleteMapping("book/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("books/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable Long id){
         bookService.deleteBook(id);
     }

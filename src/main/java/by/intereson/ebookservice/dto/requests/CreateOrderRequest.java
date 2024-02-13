@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreatePartOfTheOrderRequest {
-    private Long idBook;
-    private Integer quantity;
-    private Long idShoppingCart;
+public class CreateOrderRequest {
+    Long idUser;
 }

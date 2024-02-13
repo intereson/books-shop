@@ -19,11 +19,11 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME,allocationSize = 1)
     private Long id;
     @Column(name = "NAME",unique = true,nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roleList")
-    private List<User> users;
+//    @ManyToMany(mappedBy = "roleList",fetch = FetchType.LAZY)
+//    private List<User> users;
 }

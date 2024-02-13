@@ -14,6 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ShoppingCartResponse {
     private Long idShoppingCart;
-    private List<PartOfTheOrder> parts;
+    private List<PartResponse> parts;
     private Double sumPrice;
 }

@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public BookResponse saveBook(CreateBookRequest request) {
+    public BookResponse createBook(CreateBookRequest request) {
         Book book = bookMapper.mapToEntity(request);
         bookRepository.save(book);
         return bookMapper.mapToDTO(book);

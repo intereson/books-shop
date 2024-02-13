@@ -1,7 +1,9 @@
 package by.intereson.ebookservice.controllers;
 
 import by.intereson.ebookservice.dto.requests.ShoppingCartAddPartRequest;
+import by.intereson.ebookservice.dto.requests.ShoppingCartDeletePartRequest;
 import by.intereson.ebookservice.dto.response.ShoppingCartResponse;
+import by.intereson.ebookservice.services.PartOfTheOrderService;
 import by.intereson.ebookservice.services.ShoppingCartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,31 +12,23 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/user/shopping-cart")
+@RequestMapping("api/v1")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
-
-    @GetMapping("{id}")
+    private final PartOfTheOrderService partOfTheOrderService;
+    @GetMapping("users/{id}/shopping-cart")
     @ResponseStatus(HttpStatus.OK)
     public ShoppingCartResponse getShoppingCart(@PathVariable Long id) {
-        return shoppingCartService.getShoppingCart(id);
+        return shoppingCartService.getShoppingCartDTO(id);
     }
-
-    @PostMapping("{id}/clean")
-    @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartResponse cleanShoppingCart(@PathVariable Long id) {
-        return shoppingCartService.cleanShoppingCart(id);
-    }
-
-    @PostMapping("{id}/add")
-    @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartResponse addBookInShoppingCart(@PathVariable Long id, @RequestBody ShoppingCartAddPartRequest request) {
-        return shoppingCartService.addPartInShoppingCart(id, request);
-    }
-
-    @PostMapping("{id}/del")
-    @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartResponse delBookFromShoppingCart(@PathVariable Long id, @RequestBody ShoppingCartAddPartRequest request) {
-        return shoppingCartService.deletePartFromShoppingCart(id, request);
+//    @PutMapping("shopping-carts/{id}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public ShoppingCartResponse cleanShoppingCart(@PathVariable Long id) {
+//        return shoppingCartService.cleanShoppingCart(id);
+//    }
+    @DeleteMapping("users/{id}/shopping-cart")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cleanShoppingCart(@PathVariable Long id){
+        partOfTheOrderService.deleteAllPartsFromShoppingCart(id);
     }
 }

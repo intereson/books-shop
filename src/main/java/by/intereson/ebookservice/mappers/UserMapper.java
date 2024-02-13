@@ -8,23 +8,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", uses = {RoleListMapper.class})
+@Mapper(componentModel = "spring", uses = {BookListMapper.class,
+        RoleListMapper.class,OrderListMapper.class})
 public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
-
-        @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "surname", source = "surname")
-    @Mapping(target = "email", source = "email")
-//        @Mapping(target = "roleList", source = "roleList")
-        UserResponse mapToDTO(User user);
-    @BeanMapping(ignoreByDefault = true)
-
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "surname", source = "surname")
-    @Mapping(target = "email", source = "email")
-    @Mapping(target = "login", source = "login")
-    @Mapping(target = "password", source = "password")
+UserResponse mapToDTO(User user);
     User mapToEntity(CreateUserRequest request);
 }

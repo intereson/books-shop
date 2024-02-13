@@ -1,6 +1,7 @@
 package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreateUserRequest;
+import by.intereson.ebookservice.dto.requests.UpdateLikedBooksByUserRequest;
 import by.intereson.ebookservice.dto.response.UserResponse;
 import by.intereson.ebookservice.entities.Role;
 import by.intereson.ebookservice.entities.ShoppingCart;
@@ -8,6 +9,7 @@ import by.intereson.ebookservice.entities.User;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.mappers.UserListMapper;
 import by.intereson.ebookservice.mappers.UserMapper;
+import by.intereson.ebookservice.repositories.BookRepository;
 import by.intereson.ebookservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserListMapper userListMapper;
     private final RoleService roleService;
+    private final BookService bookService;
 
     @Override
     @Transactional(readOnly = true)
@@ -51,6 +54,7 @@ public class UserServiceImpl implements UserService {
         user.setOrders(new ArrayList<>());
         user.setShoppingCart(new ShoppingCart());
         user.getShoppingCart().setParts(new ArrayList<>());
+        user.getShoppingCart().setSumPrice(0.0);
         userRepository.save(user);
         return userMapper.mapToDTO(user);
     }
@@ -68,6 +72,21 @@ public class UserServiceImpl implements UserService {
         oldUser.setPassword(newUser.getPassword());
         userRepository.save(oldUser);
         return userMapper.mapToDTO(oldUser);
+    }
+
+    @Override
+    public UserResponse updateLikedBooksByUser(Long id, UpdateLikedBooksByUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
+        long count = user.getLikedBooks().stream().filter((p) -> p.getId().equals(request.getIdBook())).count();
+        if(count==0){
+            user.getLikedBooks().add(bookService.getBook(request.getIdBook()));
+            userRepository.save(user);
+        }
+//        else {
+//            new Exception("is present");
+//        }
+        return userMapper.mapToDTO(user);
     }
 
     @Override

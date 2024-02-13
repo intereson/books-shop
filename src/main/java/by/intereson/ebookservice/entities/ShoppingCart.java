@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.EAGER;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
@@ -24,12 +26,14 @@ public class ShoppingCart {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME,allocationSize = 1)
     private Long idShoppingCart;
+    @Column(name = "SUM_PRICE")
+    private Double sumPrice;
 
-    @OneToMany(mappedBy = "shoppingCart",fetch = EAGER)
+    @OneToMany(cascade = REMOVE,mappedBy = "shoppingCart",fetch = LAZY)
     private List<PartOfTheOrder> parts;
 
-    @OneToOne(mappedBy = "shoppingCart")
+    @OneToOne(fetch = LAZY,mappedBy = "shoppingCart")
     private User user;
 }
