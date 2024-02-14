@@ -1,5 +1,6 @@
 package by.intereson.ebookservice.dto.requests;
 
+import by.intereson.ebookservice.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateRoleRequest {
-    private String name;
+public class UpdateOrderStatusRequest {
+    private OrderStatus status;
 }

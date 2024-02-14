@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.REMOVE;
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
@@ -29,9 +28,9 @@ public class ShoppingCart {
     @Column(name = "SUM_PRICE")
     private Double sumPrice;
 
-    @OneToMany(cascade = REMOVE, mappedBy = "shoppingCart", fetch = LAZY)
+    @OneToMany(cascade = REMOVE, mappedBy = "shoppingCart")
     private List<PartOfTheOrder> parts;
 
-    @OneToOne(fetch = LAZY, mappedBy = "shoppingCart")
+    @OneToOne(mappedBy = "shoppingCart")
     private User user;
 }

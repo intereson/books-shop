@@ -19,7 +19,7 @@ public class UserController {
     @GetMapping("users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse getUser(@PathVariable Long id) {
-        return userService.getUserDTO(id);
+        return userService.getUserByIdDTO(id);
     }
 
     @GetMapping("users")
@@ -31,25 +31,25 @@ public class UserController {
     @PutMapping("users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse updateUser(@PathVariable Long id, @RequestBody CreateUserRequest request) {
-        return userService.updateUser(id, request);
+        return userService.updateUserByIdDTO(id, request);
     }
 
     @PatchMapping("users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse patchUser(@PathVariable Long id, @RequestBody UpdateLikedBooksByUserRequest request) {
-        return userService.updateLikedBooksByUser(id, request);
+        return userService.updateLikedBooksByUserIdDTO(id, request);
     }
 
     @DeleteMapping("users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+        userService.deleteUserById(id);
     }
 
     @PostMapping("users")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse saveUser(@RequestBody CreateUserRequest request) {
-        return userService.saveUser(request);
+        return userService.createUser(request);
     }
 
 

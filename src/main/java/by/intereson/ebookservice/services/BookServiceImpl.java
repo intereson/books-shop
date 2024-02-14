@@ -22,8 +22,23 @@ public class BookServiceImpl implements BookService {
     private final BookListMapper bookListMapper;
 
     @Override
-    public BookResponse getBookDTO(Long id) {
-        Book book = getBook(id);
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public BookResponse createBook(CreateBookRequest request) {
+        Book book = bookMapper.mapToEntity(request);
+        bookRepository.save(book);
+        return bookMapper.mapToDTO(book);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id:" + id));
+    }
+
+    @Override
+    public BookResponse getBookByIdDTO(Long id) {
+        Book book = getBookById(id);
         return bookMapper.mapToDTO(book);
     }
 
@@ -35,31 +50,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public Book getBook(Long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
-    }
-
-    @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public BookResponse createBook(CreateBookRequest request) {
-        Book book = bookMapper.mapToEntity(request);
-        bookRepository.save(book);
-        return bookMapper.mapToDTO(book);
-    }
-
-    @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void deleteBook(Long id) {
-        bookRepository.deleteById(id);
-    }
-
-    @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public BookResponse updateBook(Long id, CreateBookRequest request) {
+    public BookResponse updateBookById(Long id, CreateBookRequest request) {
         Book newBook = bookMapper.mapToEntity(request);
-        Book oldBook = getBook(id);
+        Book oldBook = getBookById(id);
         oldBook.setBookName(newBook.getBookName());
         oldBook.setAuthor(newBook.getAuthor());
         oldBook.setPublishingYear(newBook.getPublishingYear());
@@ -71,4 +65,11 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(oldBook);
         return bookMapper.mapToDTO(oldBook);
     }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void deleteBookById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
 }

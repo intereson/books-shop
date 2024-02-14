@@ -19,5 +19,5 @@ public class OrderResponse {
     private LocalDateTime updateDateTime;
     private OrderStatus orderStatus;
     private Double sumPrice;
-    private List<PartResponse> parts;
+    private List<PartOfTheOrderResponse> parts;
 }

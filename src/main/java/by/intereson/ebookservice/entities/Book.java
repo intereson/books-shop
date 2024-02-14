@@ -36,15 +36,15 @@ public class Book {
     private String publishingHouse;
     @Column(name = "DESCRIPTION")
     private String description;
-    @Column(name = "PRICE")
+    @Column(name = "PRICE",nullable = false)
     private Double price;
     @CreationTimestamp
     private String dateTime;
     @Enumerated(STRING)
     private Genre genre;
-    @Column(name = "QUANTITY")
+    @Column(name = "QUANTITY",nullable = false)
     private Integer quantity;
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "likedBooks")
+    @ManyToMany(mappedBy = "likedBooks")
     private List<User> users;
 
 }

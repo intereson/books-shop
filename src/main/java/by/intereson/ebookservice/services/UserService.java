@@ -8,11 +8,17 @@ import by.intereson.ebookservice.entities.User;
 import java.util.List;
 
 public interface UserService {
-    UserResponse getUserDTO(Long id);
-    User getUser(Long id);
+    UserResponse createUser(CreateUserRequest request);
+
+    User getUserById(Long id);
+
+    UserResponse getUserByIdDTO(Long id);
+
     List<UserResponse> getAllUsers();
-    UserResponse saveUser(CreateUserRequest request);
-    UserResponse updateUser(Long id, CreateUserRequest request);
-    UserResponse updateLikedBooksByUser(Long id, UpdateLikedBooksByUserRequest request);
-    void deleteUser(Long id);
+
+    UserResponse updateUserByIdDTO(Long id, CreateUserRequest request);
+
+    UserResponse updateLikedBooksByUserIdDTO(Long id, UpdateLikedBooksByUserRequest request);
+
+    void deleteUserById(Long id);
 }

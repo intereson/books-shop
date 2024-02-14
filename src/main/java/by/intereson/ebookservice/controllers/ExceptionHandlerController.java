@@ -2,6 +2,7 @@ package by.intereson.ebookservice.controllers;
 
 import by.intereson.ebookservice.dto.response.ErrorResponse;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
+import by.intereson.ebookservice.exceptions.ShoppingCartIsEmptyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,16 @@ public class ExceptionHandlerController {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .error("An error has occurred in your database query! The resource was not found!")
+                .localDateTime(LocalDateTime.now())
+                .build();
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ShoppingCartIsEmptyException.class)
+    public ErrorResponse handleShoppingCartIsEmptyException(ShoppingCartIsEmptyException exception) {
+        log.error("Exception:{}", exception.getMessage());
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .error("Shopping Cart Is Empty!")
                 .localDateTime(LocalDateTime.now())
                 .build();
     }

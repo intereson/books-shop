@@ -12,7 +12,6 @@ import java.util.List;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
@@ -33,9 +32,9 @@ public class User {
     private String name;
     @Column(name = "FAMILY", nullable = false)
     private String surname;
-    @Column(name = "EMAIL", nullable = false)
+    @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
-    @Column(name = "LOGIN", nullable = false)
+    @Column(name = "LOGIN", nullable = false, unique = true)
     private String login;
     @Column(name = "PASSWORD", nullable = false)
     private String password;
@@ -43,20 +42,20 @@ public class User {
     @Column(name = "CREATE_TIME")
     private LocalDateTime createDateTime;
 
-    @ManyToMany(cascade = PERSIST, fetch = LAZY)
+    @ManyToMany(cascade = PERSIST)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
     private List<Role> roleList;
 
-    @OneToOne(cascade = {PERSIST, REMOVE}, fetch = LAZY)
+    @OneToOne(cascade = {PERSIST, REMOVE})
     @JoinColumn(name = "SHOPPING_CART_ID")
     private ShoppingCart shoppingCart;
 
-    @OneToMany(mappedBy = "user", fetch = LAZY)
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
-    @ManyToMany(fetch = LAZY)
+    @ManyToMany
     @JoinTable(name = "USER_LIKE_BOOK",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "BOOK_ID")})

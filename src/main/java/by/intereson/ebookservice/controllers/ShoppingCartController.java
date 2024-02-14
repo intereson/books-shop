@@ -24,6 +24,6 @@ public class ShoppingCartController {
     @DeleteMapping("users/{id}/shopping-cart")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cleanShoppingCart(@PathVariable Long id) {
-        partOfTheOrderService.deleteAllPartsFromShoppingCart(id);
+        partOfTheOrderService.deleteAllPartsFromShoppingCartByUserId(id);
     }
 }

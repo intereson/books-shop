@@ -1,8 +1,7 @@
 package by.intereson.ebookservice.controllers;
 
-import by.intereson.ebookservice.dto.requests.CreateRoleRequest;
+import by.intereson.ebookservice.dto.requests.CreateAndUpdateRoleRequest;
 import by.intereson.ebookservice.dto.response.RoleResponse;
-import by.intereson.ebookservice.entities.Role;
 import by.intereson.ebookservice.services.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,14 +23,14 @@ public class RoleController {
 
     @PutMapping("roles/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RoleResponse updateRole(@PathVariable Long id, @RequestBody Role roleDetails) {
-        return roleService.updateRole(id, roleDetails);
+    public RoleResponse updateRole(@PathVariable Long id, @RequestBody CreateAndUpdateRoleRequest request) {
+        return roleService.updateRole(id, request);
     }
 
     @GetMapping("roles/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RoleResponse getRole(@PathVariable Long id) {
-        return roleService.getRoleById(id);
+        return roleService.getRoleByIdDTO(id);
     }
 
     @GetMapping("roles")
@@ -42,7 +41,7 @@ public class RoleController {
 
     @PostMapping("roles")
     @ResponseStatus(HttpStatus.CREATED)
-    public RoleResponse saveRole(@RequestBody CreateRoleRequest request) {
-        return roleService.saveRole(request);
+    public RoleResponse saveRole(@RequestBody CreateAndUpdateRoleRequest request) {
+        return roleService.createRole(request);
     }
 }

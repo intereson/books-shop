@@ -2,7 +2,7 @@ package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreatePartOfTheOrderRequest;
 import by.intereson.ebookservice.dto.requests.UpdatePartOfTheOrderRequest;
-import by.intereson.ebookservice.dto.response.PartResponse;
+import by.intereson.ebookservice.dto.response.PartOfTheOrderResponse;
 import by.intereson.ebookservice.entities.Book;
 import by.intereson.ebookservice.entities.PartOfTheOrder;
 import by.intereson.ebookservice.entities.ShoppingCart;
@@ -29,9 +29,9 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public PartResponse createPartOfTheOrder(CreatePartOfTheOrderRequest request) {
+    public PartOfTheOrderResponse createPartOfTheOrder(CreatePartOfTheOrderRequest request) {
         PartOfTheOrder partOfTheOrder = partOfTheOrderMapper.mapToEntity(request);
-        Book book = bookService.getBook(request.getIdBook());
+        Book book = bookService.getBookById(request.getIdBook());
         partOfTheOrder.setBook(book);
         partOfTheOrder.setBookName(book.getBookName());
         Double price = book.getPrice();
@@ -40,28 +40,24 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
         Double sumPrise = price * quantity;
         partOfTheOrder.setSumPrice(sumPrise);
         partOfTheOrder.setQuantity(quantity);
-        ShoppingCart shoppingCart = shoppingCartService.setSumPrice(request.getIdShoppingCart(), sumPrise);
+        ShoppingCart shoppingCart = shoppingCartService.setSumPriceInShoppingCart(request.getIdShoppingCart(), sumPrise);
         partOfTheOrder.setShoppingCart(shoppingCart);
         partOfTheOrderRepository.save(partOfTheOrder);
         return partOfTheOrderMapper.mapToDTO(partOfTheOrder);
     }
 
     @Override
-    public PartResponse getPartOfTheOrderDTO(Long id) {
-        return partOfTheOrderMapper.mapToDTO(getPartOfTheOrder(id));
-    }
-
-    @Override
     @Transactional(readOnly = true)
-    public PartOfTheOrder getPartOfTheOrder(Long id) {
+    public PartOfTheOrder getPartOfTheOrderById(Long id) {
         return partOfTheOrderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Part of the order not found with id:" + id));
     }
 
     @Override
-    public List<PartResponse> getAllPartsOfTheOrderDTO() {
-        return partOfTheOrderListMapper.toDTOList(getAllPartsOfTheOrder());
+    public PartOfTheOrderResponse getPartOfTheOrderByIdDTO(Long id) {
+        return partOfTheOrderMapper.mapToDTO(getPartOfTheOrderById(id));
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -70,10 +66,16 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
     }
 
     @Override
+    public List<PartOfTheOrderResponse> getAllPartsOfTheOrderDTO() {
+        return partOfTheOrderListMapper.toDTOList(getAllPartsOfTheOrder());
+    }
+
+
+    @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public PartResponse updatePartOfTheOrder(Long id, UpdatePartOfTheOrderRequest request) {
+    public PartOfTheOrderResponse updatePartOfTheOrderById(Long id, UpdatePartOfTheOrderRequest request) {
         Integer newQuantity = request.getQuantity();
-        PartOfTheOrder oldPartOfTheOrder = getPartOfTheOrder(id);
+        PartOfTheOrder oldPartOfTheOrder = getPartOfTheOrderById(id);
         Double price = oldPartOfTheOrder.getPrice();
         Double sumPrice = price * newQuantity;
         oldPartOfTheOrder.setSumPrice(sumPrice);
@@ -84,13 +86,13 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void deletePartOfTheOrder(Long id) {
+    public void deletePartOfTheOrderById(Long id) {
         partOfTheOrderRepository.deleteById(id);
     }
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void deleteAllPartsFromShoppingCart(Long userId) {
+    public void deleteAllPartsFromShoppingCartByUserId(Long userId) {
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(userId);
         List<PartOfTheOrder> parts = shoppingCart.getParts();
         List<Long> ids = parts.stream()

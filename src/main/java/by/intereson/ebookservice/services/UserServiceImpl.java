@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.intereson.ebookservice.utils.Constants.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -28,16 +30,32 @@ public class UserServiceImpl implements UserService {
     private final BookService bookService;
 
     @Override
-    public UserResponse getUserDTO(Long id) {
-        User user = getUser(id);
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public UserResponse createUser(CreateUserRequest request) {
+        User user = userMapper.mapToEntity(request);
+        Role role = roleService.getRoleByName(ROLE_NEW_USER);
+        user.setRoleList(new ArrayList<>());
+        user.getRoleList().add(START_INDEX, role);
+        user.setLikedBooks(new ArrayList<>());
+        user.setOrders(new ArrayList<>());
+        user.setShoppingCart(new ShoppingCart());
+        user.getShoppingCart().setParts(new ArrayList<>());
+        user.getShoppingCart().setSumPrice(START_SUM_PRICE);
+        userRepository.save(user);
         return userMapper.mapToDTO(user);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public User getUser(Long id) {
+    public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id:" + id));
+    }
+
+    @Override
+    public UserResponse getUserByIdDTO(Long id) {
+        User user = getUserById(id);
+        return userMapper.mapToDTO(user);
     }
 
     @Override
@@ -48,26 +66,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public UserResponse saveUser(CreateUserRequest request) {
-        User user = userMapper.mapToEntity(request);
-        Role role = roleService.getRoleByName("USER");
-        user.setRoleList(new ArrayList<>());
-        user.getRoleList().add(0, role);
-        user.setLikedBooks(new ArrayList<>());
-        user.setOrders(new ArrayList<>());
-        user.setShoppingCart(new ShoppingCart());
-        user.getShoppingCart().setParts(new ArrayList<>());
-        user.getShoppingCart().setSumPrice(0.0);
-        userRepository.save(user);
-        return userMapper.mapToDTO(user);
-    }
-
-    @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public UserResponse updateUser(Long id, CreateUserRequest request) {
+    public UserResponse updateUserByIdDTO(Long id, CreateUserRequest request) {
         User newUser = userMapper.mapToEntity(request);
-        User oldUser = getUser(id);
+        User oldUser = getUserById(id);
         oldUser.setName(newUser.getName());
         oldUser.setSurname(newUser.getSurname());
         oldUser.setEmail(newUser.getEmail());
@@ -78,23 +80,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public UserResponse updateLikedBooksByUser(Long id, UpdateLikedBooksByUserRequest request) {
-        User user = getUser(id);
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public UserResponse updateLikedBooksByUserIdDTO(Long id, UpdateLikedBooksByUserRequest request) {
+        User user = getUserById(id);
         long count = user.getLikedBooks().stream().filter((p) -> p.getId().equals(request.getIdBook())).count();
-        if (count == 0) {
-            user.getLikedBooks().add(bookService.getBook(request.getIdBook()));
-            userRepository.save(user);
+        if (count == START_INDEX) {
+            user.getLikedBooks().add(bookService.getBookById(request.getIdBook()));
+        } else {
+            user.getLikedBooks().remove(bookService.getBookById(request.getIdBook()));
         }
-//        else {
-//            new Exception("is present");//todo exception
-//        }
+        userRepository.save(user);
         return userMapper.mapToDTO(user);
     }
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void deleteUser(Long id) {
+    public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 }

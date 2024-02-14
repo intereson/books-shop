@@ -1,8 +1,8 @@
 package by.intereson.ebookservice.controllers;
 
 import by.intereson.ebookservice.dto.requests.CreateOrderRequest;
+import by.intereson.ebookservice.dto.requests.UpdateOrderStatusRequest;
 import by.intereson.ebookservice.dto.response.OrderResponse;
-import by.intereson.ebookservice.enums.OrderStatus;
 import by.intereson.ebookservice.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class OrderController {
     @GetMapping("users/{id}/orders")
     @ResponseStatus(HttpStatus.OK)
     public List<OrderResponse> getOrdersByUserId(@PathVariable Long id) {
-        return orderService.getOrdersByUserId(id);
+        return orderService.getOrdersByUserIdDTO(id);
     }
 
     @PostMapping("orders")
@@ -42,8 +42,8 @@ public class OrderController {
 
     @PatchMapping("orders/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public OrderResponse patchOrderStatus(@PathVariable Long id, @RequestBody OrderStatus status) {
-        return orderService.patchOrderStatus(id, status);
+    public OrderResponse patchOrderStatus(@PathVariable Long id, @RequestBody UpdateOrderStatusRequest request) {
+        return orderService.updateOrderStatusById(id, request);
     }
 
     @DeleteMapping("orders/{id}")

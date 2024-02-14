@@ -8,8 +8,9 @@ import by.intereson.ebookservice.mappers.ShoppingCartMapper;
 import by.intereson.ebookservice.repositories.ShoppingCartRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+
+import static by.intereson.ebookservice.utils.Constants.START_SUM_PRICE;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartMapper shoppingCartMapper;
 
     @Override
-    public ShoppingCart setSumPrice(Long idShoppingCart,Double sumPrise) {
+    public ShoppingCart setSumPriceInShoppingCart(Long idShoppingCart, Double sumPrise) {
         ShoppingCart shoppingCart = getShoppingCart(idShoppingCart);
         Double shoppingCartSumPrice = shoppingCart.getSumPrice();
         shoppingCartSumPrice = shoppingCartSumPrice + sumPrise;
@@ -35,14 +36,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(readOnly = true)
     public ShoppingCart getShoppingCart(Long idShoppingCart) {
         return shoppingCartRepository.findById(idShoppingCart)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + idShoppingCart));
+                .orElseThrow(() -> new ResourceNotFoundException("Shopping cart  not found with id:" + idShoppingCart));
     }
 
     @Override
     public void cleanSumPriceInShoppingCart(Long idShoppingCart) {
-        getShoppingCart(idShoppingCart).setSumPrice(0.0);
+        getShoppingCart(idShoppingCart).setSumPrice(START_SUM_PRICE);
     }
 }

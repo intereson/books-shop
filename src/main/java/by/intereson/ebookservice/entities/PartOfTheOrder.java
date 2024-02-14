@@ -25,17 +25,17 @@ public class PartOfTheOrder {
     private Double sumPrice;
     @Column(name = "PRICE_BOOK")
     private Double price;
-    @Column(name = "QUANTITY")
+    @Column(name = "QUANTITY",nullable = false)
     private Integer quantity;
-    @Column(name = "BOOK_NAME")
+    @Column(name = "BOOK_NAME",nullable = false)
     private String bookName;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "ORDER_ID")
     private Order order;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "BOOK_ID")
     private Book book;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "SHOPPING_CART_ID")
     private ShoppingCart shoppingCart;
 }

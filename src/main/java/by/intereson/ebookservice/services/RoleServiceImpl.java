@@ -1,6 +1,6 @@
 package by.intereson.ebookservice.services;
 
-import by.intereson.ebookservice.dto.requests.CreateRoleRequest;
+import by.intereson.ebookservice.dto.requests.CreateAndUpdateRoleRequest;
 import by.intereson.ebookservice.dto.response.RoleResponse;
 import by.intereson.ebookservice.entities.Role;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
@@ -23,18 +23,31 @@ public class RoleServiceImpl implements RoleService {
     private final RoleListMapper roleListMapper;
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public RoleResponse updateRole(Long id, Role roleDetails) {
-        Role updateRole = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
-        updateRole.setName(roleDetails.getName());
-        Role saveRole = roleRepository.save(updateRole);
-        return roleMapper.mapToDTO(saveRole);
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public RoleResponse createRole(CreateAndUpdateRoleRequest request) {
+        Role role = roleMapper.mapToEntity(request);
+        roleRepository.save(role);
+        return roleMapper.mapToDTO(role);
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void delete(Long id) {
-        roleRepository.deleteById(id);
+    @Transactional(readOnly = true)
+    public Role getRoleById(Long id) {
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with id:" + id));
+    }
+
+    @Override
+    public RoleResponse getRoleByIdDTO(Long id) {
+        Role role = getRoleById(id);
+        return roleMapper.mapToDTO(role);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Role getRoleByName(String name) {
+        return roleRepository.getRoleByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name:" + name));
     }
 
     @Override
@@ -44,24 +57,21 @@ public class RoleServiceImpl implements RoleService {
         return roleListMapper.toDTOList(roles);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public RoleResponse getRoleById(Long id) {
-        Role role = roleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found with id:" + id));
-        return roleMapper.mapToDTO(role);
-    }
 
     @Override
-    @Transactional(readOnly = true)
-    public Role getRoleByName(String name) {
-        return roleRepository.getRoleByName(name).orElseThrow(() -> new ResourceNotFoundException("Entity not found with name:" + name));
-    }
-
-    @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public RoleResponse saveRole(CreateRoleRequest request) {
-        Role role = roleMapper.mapToEntity(request);
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public RoleResponse updateRole(Long id, CreateAndUpdateRoleRequest request) {
+        Role role = getRoleById(id);
+        role.setName(request.getName());
         roleRepository.save(role);
         return roleMapper.mapToDTO(role);
     }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void delete(Long id) {
+        roleRepository.deleteById(id);
+    }
+
+
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PartResponse {
+public class PartOfTheOrderResponse {
     private Long id;
     private Double price;
     private Double sumPrice;

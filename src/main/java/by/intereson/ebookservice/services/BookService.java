@@ -7,10 +7,16 @@ import by.intereson.ebookservice.entities.Book;
 import java.util.List;
 
 public interface BookService {
-    BookResponse getBookDTO(Long id);
-    List<BookResponse> getAllBooksUnsortedDTO();
-    Book getBook(Long id);
     BookResponse createBook(CreateBookRequest request);
-    void deleteBook(Long id);
-    BookResponse updateBook(Long id, CreateBookRequest request);
+
+    Book getBookById(Long id);
+
+    BookResponse getBookByIdDTO(Long id);
+
+    List<BookResponse> getAllBooksUnsortedDTO();
+
+    BookResponse updateBookById(Long id, CreateBookRequest request);
+
+    void deleteBookById(Long id);
+
 }

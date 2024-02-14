@@ -12,7 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
@@ -28,7 +27,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME,allocationSize = 1)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
     private Long id;
 
     @CreationTimestamp
@@ -39,12 +38,12 @@ public class Order {
     private LocalDateTime updateDateTime;
     @Enumerated(STRING)
     private OrderStatus orderStatus;
-    @Column(name = "SUM_PRICES")
+    @Column(name = "SUM_PRICES", nullable = false)
     private Double sumPrice;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "order",cascade = REMOVE)
+    @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<PartOfTheOrder> parts;
 
 }
