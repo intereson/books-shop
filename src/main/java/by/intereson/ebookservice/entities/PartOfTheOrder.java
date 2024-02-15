@@ -13,7 +13,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "PART_OF_THE_ORDERS")
+@Table(name = "PARTS_OF_THE_ORDER")
 public class PartOfTheOrder {
     private static final String SEQ_NAME = "PART_OF_THE_ORDER_SEQ";
 
@@ -33,7 +33,7 @@ public class PartOfTheOrder {
     @JoinColumn(name = "ORDER_ID")
     private Order order;
     @ManyToOne
-    @JoinColumn(name = "BOOK_ID")
+    @JoinColumn(name = "BOOK_ID", nullable = false)
     private Book book;
     @ManyToOne
     @JoinColumn(name = "SHOPPING_CART_ID")

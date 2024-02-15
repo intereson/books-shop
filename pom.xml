@@ -52,6 +52,11 @@
             <artifactId>lombok-mapstruct-binding</artifactId>
             <version>${lombok-mapstruct-binding.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.20.0</version>
+        </dependency>
     </dependencies>
 
     <build>

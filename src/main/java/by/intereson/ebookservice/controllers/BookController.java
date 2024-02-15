@@ -1,6 +1,7 @@
 package by.intereson.ebookservice.controllers;
 
 import by.intereson.ebookservice.dto.requests.CreateBookRequest;
+import by.intereson.ebookservice.dto.requests.GetBooksByGenreRequest;
 import by.intereson.ebookservice.dto.response.BookResponse;
 import by.intereson.ebookservice.services.BookService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,11 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public List<BookResponse> getAllBooksUnsorted() {
         return bookService.getAllBooksUnsortedDTO();
+    }
+    @GetMapping("books/genre")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookResponse> getBooksByGenre(@RequestBody GetBooksByGenreRequest request) {
+        return bookService.getBooksByGenre(request);
     }
 
     @PostMapping("books")

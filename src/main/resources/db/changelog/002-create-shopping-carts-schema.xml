@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="002-create-shopping-carts-schema" author="Sergey Lukashonak">
+        <createTable tableName="shopping_carts">
+            <column name="id_shopping_cart"
+                    type="bigint">
+                <constraints nullable="false"
+                             primaryKey="true"/>
+            </column>
+            <column name="sum_price"
+                    type="double">
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

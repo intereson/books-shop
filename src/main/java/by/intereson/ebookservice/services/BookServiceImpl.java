@@ -1,6 +1,7 @@
 package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreateBookRequest;
+import by.intereson.ebookservice.dto.requests.GetBooksByGenreRequest;
 import by.intereson.ebookservice.dto.response.BookResponse;
 import by.intereson.ebookservice.entities.Book;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
@@ -72,4 +73,10 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookResponse> getBooksByGenre(GetBooksByGenreRequest request) {
+        List<Book> booksByGenre = bookRepository.findBooksByGenre(request.getGenre());
+        return bookListMapper.toDTOList(booksByGenre);
+    }
 }

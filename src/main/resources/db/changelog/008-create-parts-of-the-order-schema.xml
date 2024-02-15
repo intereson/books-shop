@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="008-create-parts-of-the-order-schema" author="Sergey Lukashonak">
+        <createTable tableName="parts_of_the_order">
+            <column name="id"
+                    type="bigint"
+                    autoIncrement="true">
+                <constraints nullable="false"
+                             unique="true"
+                             primaryKey="true"/>
+            </column>
+            <column name="book_name"
+                    type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price_book"
+                    type="double">
+                <constraints nullable="true"/>
+            </column>
+            <column name="sum_price"
+                    type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity"
+                    type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id"
+                    type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_id"
+                    type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="shopping_carts_id"
+                    type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="shopping_cart_id"
+                                 constraintName="parts_of_the_order_shopping_cart_id_constraint_key" referencedTableName="shopping_carts"
+                                 referencedColumnNames="id_shopping_cart"/>
+        <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="order_id"
+                                 constraintName="parts_of_the_order_order_id_constraint_key" referencedTableName="orders"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="book_id"
+                                 constraintName="parts_of_the_order_book_id_constraint_key" referencedTableName="books"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
