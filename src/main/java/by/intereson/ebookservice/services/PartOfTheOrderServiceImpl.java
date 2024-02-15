@@ -6,6 +6,7 @@ import by.intereson.ebookservice.dto.response.PartOfTheOrderResponse;
 import by.intereson.ebookservice.entities.Book;
 import by.intereson.ebookservice.entities.PartOfTheOrder;
 import by.intereson.ebookservice.entities.ShoppingCart;
+import by.intereson.ebookservice.exceptions.QuantityException;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.mappers.PartOfTheOrderListMapper;
 import by.intereson.ebookservice.mappers.PartOfTheOrderMapper;
@@ -28,10 +29,20 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
     private final ShoppingCartService shoppingCartService;
 
     @Override
+    public boolean isPresentQuantityBook(Book book, Integer quantity) {
+        return book.getQuantity() >= quantity;
+    }
+
+    @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public PartOfTheOrderResponse createPartOfTheOrder(CreatePartOfTheOrderRequest request) {
         PartOfTheOrder partOfTheOrder = partOfTheOrderMapper.mapToEntity(request);
         Book book = bookService.getBookById(request.getIdBook());
+        if (!isPresentQuantityBook(book, request.getQuantity())) {
+            throw new QuantityException("There is no such amount . There is only " + book.getQuantity());
+        }
+        bookService.increaseInReserveQuantityBook(book, request.getQuantity());
+        bookService.reduceFromQuantityBook(book, request.getQuantity());
         partOfTheOrder.setBook(book);
         partOfTheOrder.setBookName(book.getBookName());
         Double price = book.getPrice();
@@ -76,6 +87,11 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
     public PartOfTheOrderResponse updatePartOfTheOrderById(Long id, UpdatePartOfTheOrderRequest request) {
         Integer newQuantity = request.getQuantity();
         PartOfTheOrder oldPartOfTheOrder = getPartOfTheOrderById(id);
+        int differenceQuantity = request.getQuantity()-oldPartOfTheOrder.getQuantity();
+
+            bookService.reduceFromQuantityBook(oldPartOfTheOrder.getBook(), differenceQuantity);
+            bookService.increaseInReserveQuantityBook(oldPartOfTheOrder.getBook(), differenceQuantity);
+
         Double price = oldPartOfTheOrder.getPrice();
         Double sumPrice = price * newQuantity;
         oldPartOfTheOrder.setSumPrice(sumPrice);
@@ -95,6 +111,12 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
     public void deleteAllPartsFromShoppingCartByUserId(Long userId) {
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(userId);
         List<PartOfTheOrder> parts = shoppingCart.getParts();
+        for (PartOfTheOrder varPart : parts) {
+            Book book = varPart.getBook();
+            Integer reserveQuantity = book.getReserveQuantity();
+            bookService.reduceFromReserveQuantityBook(book,reserveQuantity);
+            bookService.increaseInQuantityBook(book,reserveQuantity);
+                    }
         List<Long> ids = parts.stream()
                 .mapToLong(PartOfTheOrder::getId)
                 .boxed()

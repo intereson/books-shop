@@ -17,4 +17,5 @@ public class CreateBookRequest {
     private Double price;
     private Genre genre;
     private Integer quantity;
+    private Integer reserveQuantity;
 }

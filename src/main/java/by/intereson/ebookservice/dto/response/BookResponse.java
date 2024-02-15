@@ -21,4 +21,5 @@ public class BookResponse {
     private String dateTime;
     private Genre genre;
     private Integer quantity;
+    private Integer reserveQuantity;
 }

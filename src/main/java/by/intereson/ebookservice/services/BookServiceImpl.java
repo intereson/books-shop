@@ -4,6 +4,7 @@ import by.intereson.ebookservice.dto.requests.CreateBookRequest;
 import by.intereson.ebookservice.dto.requests.GetBooksByGenreRequest;
 import by.intereson.ebookservice.dto.response.BookResponse;
 import by.intereson.ebookservice.entities.Book;
+import by.intereson.ebookservice.exceptions.QuantityException;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.mappers.BookListMapper;
 import by.intereson.ebookservice.mappers.BookMapper;
@@ -50,6 +51,8 @@ public class BookServiceImpl implements BookService {
         return bookListMapper.toDTOList(books);
     }
 
+
+
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public BookResponse updateBookById(Long id, CreateBookRequest request) {
@@ -63,6 +66,7 @@ public class BookServiceImpl implements BookService {
         oldBook.setGenre(newBook.getGenre());
         oldBook.setPrice(newBook.getPrice());
         oldBook.setQuantity(newBook.getQuantity());
+        oldBook.setReserveQuantity(request.getReserveQuantity());
         bookRepository.save(oldBook);
         return bookMapper.mapToDTO(oldBook);
     }
@@ -73,6 +77,36 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void increaseInQuantityBook(Book book, Integer quantity) {
+        book.setQuantity(book.getQuantity()+quantity);
+        bookRepository.save(book);
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void reduceFromQuantityBook(Book book, Integer quantity) {
+        int differenceQuantity=book.getQuantity()-quantity;
+        if(differenceQuantity<0){
+            throw new QuantityException("There is no such amount . There is only " + book.getQuantity());
+        }
+        else book.setQuantity(differenceQuantity);
+        bookRepository.save(book);
+            }
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void reduceFromReserveQuantityBook(Book book, Integer quantity) {
+        book.setReserveQuantity(book.getReserveQuantity()-quantity);
+        bookRepository.save(book);
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void increaseInReserveQuantityBook(Book book, Integer quantity) {
+                        book.setReserveQuantity(book.getReserveQuantity()+quantity);
+        bookRepository.save(book);
+    }
     @Override
     @Transactional(readOnly = true)
     public List<BookResponse> getBooksByGenre(GetBooksByGenreRequest request) {

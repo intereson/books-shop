@@ -1,6 +1,7 @@
 package by.intereson.ebookservice.controllers;
 
 import by.intereson.ebookservice.dto.response.ErrorResponse;
+import by.intereson.ebookservice.exceptions.QuantityException;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.exceptions.ShoppingCartIsEmptyException;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,16 @@ public class ExceptionHandlerController {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .error("Shopping Cart Is Empty!")
+                .localDateTime(LocalDateTime.now())
+                .build();
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(QuantityException.class)
+    public ErrorResponse handleQuantityException(QuantityException exception) {
+        log.error("Exception:{}", exception.getMessage());
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .error("Error quantity!")
                 .localDateTime(LocalDateTime.now())
                 .build();
     }

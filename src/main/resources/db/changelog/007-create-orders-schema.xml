@@ -16,11 +16,11 @@
 
             <column name="create_date_time" type="datetime"
                     defaultValueComputed="NOW()">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="update_date_time" type="datetime"
                     defaultValueComputed="NOW() ON UPDATE NOW()">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="order_status"
                     type="enum ('NEW', 'IN_PROCESSING', 'CONFIRMED', 'DELIVERED', 'RECEIVING')">
@@ -32,13 +32,10 @@
             </column>
 
             <column name="user_id"
-                    type="bigint">
-                <constraints
-                        nullable="false"/>
-            </column>
+                    type="bigint"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="orders" baseColumnNames="user_id"
                                  constraintName="orders_user_id_constraint" referencedTableName="users"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id" onDelete="SET NULL"/>
     </changeSet>
 </databaseChangeLog>

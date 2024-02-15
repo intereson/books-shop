@@ -45,6 +45,8 @@ public class Book {
     private Genre genre;
     @Column(name = "QUANTITY",nullable = false)
     private Integer quantity;
+    @Column(name = "RESERVE_QUANTITY")
+    private Integer reserveQuantity;
     @ManyToMany(mappedBy = "likedBooks")
     private List<User> users;
 

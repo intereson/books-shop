@@ -20,5 +20,8 @@ public interface BookService {
     BookResponse updateBookById(Long id, CreateBookRequest request);
 
     void deleteBookById(Long id);
-
+    void reduceFromQuantityBook(Book book, Integer quantity);
+    void increaseInQuantityBook(Book book, Integer quantity);
+    void reduceFromReserveQuantityBook(Book book, Integer quantity);
+    void increaseInReserveQuantityBook(Book book, Integer quantity);
 }

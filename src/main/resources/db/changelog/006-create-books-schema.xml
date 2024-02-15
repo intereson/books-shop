@@ -49,6 +49,10 @@
                     type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="reserve_quantity"
+                    type="int">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
         <insert tableName="books">
             <column name="author">Анджей Сапковский</column>
@@ -59,6 +63,7 @@
             <column name="publishing_house">none</column>
             <column name="publishing_year">2020</column>
             <column name="quantity">10</column>
+            <column name="reserve_quantity">0</column>
         </insert>
         <insert tableName="books">
             <column name="author">Рэй Брэдбери</column>
@@ -69,6 +74,7 @@
             <column name="publishing_house">none</column>
             <column name="publishing_year">2022</column>
             <column name="quantity">8</column>
+            <column name="reserve_quantity">0</column>
         </insert>
         <insert tableName="books">
             <column name="author">Харальд Хорф</column>
@@ -79,6 +85,7 @@
             <column name="publishing_house">none</column>
             <column name="publishing_year">2023</column>
             <column name="quantity">40</column>
+            <column name="reserve_quantity">0</column>
         </insert>
         <insert tableName="books">
             <column name="author">Стивен Кинг</column>
@@ -89,6 +96,7 @@
             <column name="publishing_house">none</column>
             <column name="publishing_year">2019</column>
             <column name="quantity">20</column>
+            <column name="reserve_quantity">0</column>
         </insert>
         <insert tableName="books">
             <column name="author">Фрэнк Герберт</column>
@@ -99,6 +107,7 @@
             <column name="publishing_house">none</column>
             <column name="publishing_year">2021</column>
             <column name="quantity">30</column>
+            <column name="reserve_quantity">0</column>
         </insert>
         <insert tableName="books">
             <column name="author">Герберт Шилдт</column>
@@ -109,6 +118,7 @@
             <column name="publishing_house">none</column>
             <column name="publishing_year">2018</column>
             <column name="quantity">10</column>
+            <column name="reserve_quantity">0</column>
         </insert>
         <insert tableName="books">
             <column name="author">Kathy Sierra, Bert Bates</column>
@@ -119,6 +129,7 @@
             <column name="publishing_house">none</column>
             <column name="publishing_year">2012</column>
             <column name="quantity">10</column>
+            <column name="reserve_quantity">0</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

@@ -28,9 +28,10 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderListMapper orderListMapper;
     private final ShoppingCartService shoppingCartService;
+    private final BookService bookService;
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public OrderResponse createOrder(CreateOrderRequest request) {
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(request.getIdUser());
         if (shoppingCart.getParts().isEmpty()) {
@@ -44,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
                 sum = varPart.getSumPrice() + sum;
                 varPart.setOrder(order);
                 varPart.setShoppingCart(null);
+                Integer quantity = varPart.getQuantity();
+                bookService.reduceFromReserveQuantityBook(varPart.getBook(),quantity );
             }
             order.setSumPrice(sum);
             order.setUser(shoppingCart.getUser());
