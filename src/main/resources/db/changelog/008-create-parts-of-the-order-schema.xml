@@ -37,19 +37,20 @@
                     type="bigint">
                 <constraints nullable="true"/>
             </column>
-            <column name="shopping_carts_id"
+            <column name="shopping_cart_id"
                     type="bigint">
                 <constraints nullable="true"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="shopping_cart_id"
-                                 constraintName="parts_of_the_order_shopping_cart_id_constraint_key" referencedTableName="shopping_carts"
-                                 referencedColumnNames="id_shopping_cart"/>
-        <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="order_id"
+         <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="order_id"
                                  constraintName="parts_of_the_order_order_id_constraint_key" referencedTableName="orders"
                                  referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="book_id"
                                  constraintName="parts_of_the_order_book_id_constraint_key" referencedTableName="books"
                                  referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="shopping_cart_id"
+                                 constraintName="parts_of_the_order_shopping_cart_id_constraint_key" referencedTableName="shopping_carts"
+                                 referencedColumnNames="id_shopping_cart"/>
+
     </changeSet>
 </databaseChangeLog>

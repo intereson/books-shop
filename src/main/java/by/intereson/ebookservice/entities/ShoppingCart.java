@@ -23,7 +23,7 @@ public class ShoppingCart {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1, initialValue = 100)
     private Long idShoppingCart;
     @Column(name = "SUM_PRICE")
     private Double sumPrice;

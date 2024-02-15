@@ -6,13 +6,10 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
     <include file="db/changelog/005-create-roles-schema.xml"/>
     <include file="db/changelog/002-create-shopping-carts-schema.xml"/>
-
     <include file="db/changelog/001-create-users-schema.xml"/>
     <include file="db/changelog/003-create-user-role-schema.xml"/>
     <include file="db/changelog/006-create-books-schema.xml"/>
     <include file="db/changelog/004-create-user-like-book-schema.xml"/>
-
-
     <include file="db/changelog/007-create-orders-schema.xml"/>
     <include file="db/changelog/008-create-parts-of-the-order-schema.xml"/>
 </databaseChangeLog>

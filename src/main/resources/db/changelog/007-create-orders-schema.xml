@@ -13,9 +13,14 @@
                              unique="true"
                              primaryKey="true"/>
             </column>
-            <column name="create_time"
-                    type="datetime(6)">
-                <constraints nullable="true"/>
+
+            <column name="create_date_time" type="datetime"
+                    defaultValueComputed="NOW()">
+                <constraints nullable="false" />
+            </column>
+            <column name="update_date_time" type="datetime"
+                    defaultValueComputed="NOW() ON UPDATE NOW()">
+                <constraints nullable="false" />
             </column>
             <column name="order_status"
                     type="enum ('NEW', 'IN_PROCESSING', 'CONFIRMED', 'DELIVERED', 'RECEIVING')">
@@ -25,10 +30,7 @@
                     type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="update_time"
-                    type="datetime(6)">
-                <constraints nullable="true"/>
-            </column>
+
             <column name="user_id"
                     type="bigint">
                 <constraints

@@ -38,7 +38,7 @@ public class Order {
     private LocalDateTime updateDateTime;
     @Enumerated(STRING)
     private OrderStatus orderStatus;
-    @Column(name = "SUM_PRICES", nullable = false)
+    @Column(name = "SUM_PRICE", nullable = false)
     private Double sumPrice;
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)

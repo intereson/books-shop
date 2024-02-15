@@ -24,7 +24,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1, initialValue = 100)
     private Long id;
     @Column(name = "BOOK_NAME", nullable = false)
     private String bookName;
@@ -38,6 +38,7 @@ public class Book {
     private String description;
     @Column(name = "PRICE",nullable = false)
     private Double price;
+    @Column(name = "CREATE_TIME")
     @CreationTimestamp
     private String dateTime;
     @Enumerated(STRING)

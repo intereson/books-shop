@@ -21,5 +21,11 @@
         <insert tableName="roles">
             <column name="name">USER</column>
         </insert>
+        <insert tableName="roles">
+            <column name="name">ADMIN</column>
+        </insert>
+        <insert tableName="roles">
+            <column name="name">MANAGER</column>
+        </insert>
     </changeSet>
 </databaseChangeLog>

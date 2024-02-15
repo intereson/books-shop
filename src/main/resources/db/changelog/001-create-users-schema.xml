@@ -8,7 +8,7 @@
         <createTable tableName="users">
             <column name="id"
                     type="bigint"
-                    >
+                    autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="name"
@@ -33,8 +33,11 @@
                     type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="create_time"
-                    type="datetime(6)"/>
+
+            <column name="create_time" type="datetime"
+                    defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
             <column name="shopping_cart_id"
                     type="bigint">
                 <constraints nullable="true" unique="true"/>
@@ -42,16 +45,22 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="users" baseColumnNames="shopping_cart_id"
                                  constraintName="shopping_cart_id_users_id" referencedTableName="shopping_carts"
-                                 referencedColumnNames="id_shopping_cart" onUpdate="CASCADE"/>
+                                 referencedColumnNames="id_shopping_cart" onUpdate="CASCADE" onDelete="CASCADE"/>
         <insert tableName="users">
-            <column name="id">1</column>
             <column name="name">Andrey</column>
             <column name="family">Petrov</column>
             <column name="email">petrov@gmail.com</column>
             <column name="login">petrov</column>
             <column name="password">password</column>
-<!--            <column name="shopping_cart_id">1</column>-->
+            <column name="shopping_cart_id">1</column>
         </insert>
-
+        <insert tableName="users">
+            <column name="name">Dmitry</column>
+            <column name="family">Ivanov</column>
+            <column name="email">ivanov@gmail.com</column>
+            <column name="login">ivanov</column>
+            <column name="password">password</column>
+            <column name="shopping_cart_id">2</column>
+        </insert>
     </changeSet>
 </databaseChangeLog>

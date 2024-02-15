@@ -17,9 +17,9 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="user_role" baseColumnNames="user_id"
                                  constraintName="user_role_role_id_constraint_key" referencedTableName="users"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id" onUpdate="CASCADE"/>
         <addForeignKeyConstraint baseTableName="user_role" baseColumnNames="role_id"
                                  constraintName="user_role_user_id_constraint" referencedTableName="roles"
-                                 referencedColumnNames="id"/>
-    </changeSet>
+                                 referencedColumnNames="id" onUpdate="CASCADE"/>
+            </changeSet>
 </databaseChangeLog>
