@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface PartOfTheOrderMapper {
-    PartOfTheOrderResponse mapToDTO(PartOfTheOrder part);
+    PartOfTheOrderResponse mapToDto(PartOfTheOrder part);
 
     PartOfTheOrder mapToEntity(CreatePartOfTheOrderRequest request);
 

@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
-    <changeSet id="007-create-orders-schema" author="Sergey Lukashonak">
+    <changeSet id="012-create-orders-schema" author="Sergey Lukashonak">
         <createTable tableName="orders">
             <column name="id"
                     type="bigint"
@@ -13,7 +13,6 @@
                              unique="true"
                              primaryKey="true"/>
             </column>
-
             <column name="create_date_time" type="datetime"
                     defaultValueComputed="NOW()">
                 <constraints nullable="false"/>
@@ -30,12 +29,13 @@
                     type="double">
                 <constraints nullable="false"/>
             </column>
-
             <column name="user_id"
-                    type="bigint"/>
+                    type="bigint">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="orders" baseColumnNames="user_id"
                                  constraintName="orders_user_id_constraint" referencedTableName="users"
-                                 referencedColumnNames="id" onDelete="SET NULL"/>
+                                 referencedColumnNames="id" />
     </changeSet>
 </databaseChangeLog>

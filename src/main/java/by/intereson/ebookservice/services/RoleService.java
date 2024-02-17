@@ -11,14 +11,13 @@ public interface RoleService {
 
     Role getRoleById(Long id);
 
-    RoleResponse getRoleByIdDTO(Long id);
+    RoleResponse getRoleByIdDto(Long id);
 
     Role getRoleByName(String name);
 
     List<RoleResponse> getRoles();
 
+    RoleResponse updateRoleById(Long id, CreateAndUpdateRoleRequest request);
 
-    RoleResponse updateRole(Long id, CreateAndUpdateRoleRequest request);
-
-    void delete(Long id);
+    void deleteRoleById(Long id);
 }

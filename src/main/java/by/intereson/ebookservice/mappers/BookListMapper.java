@@ -8,5 +8,5 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = BookMapper.class)
 public interface BookListMapper {
-    List<BookResponse> toDTOList(List<Book> bookList);
+    List<BookResponse> mapListToDto(List<Book> bookList);
 }

@@ -7,6 +7,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", uses = {PartOfTheOrderListMapper.class})
 public interface ShoppingCartMapper {
 
-    ShoppingCartResponse mapToDTO(ShoppingCart shoppingCart);
+    ShoppingCartResponse mapToDto(ShoppingCart shoppingCart);
 
 }

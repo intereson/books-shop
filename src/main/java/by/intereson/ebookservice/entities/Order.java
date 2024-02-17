@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
@@ -33,17 +35,22 @@ public class Order {
     @CreationTimestamp
     @Column(name = "CREATE_DATE_TIME")
     private LocalDateTime createDateTime;
+
     @UpdateTimestamp
     @Column(name = "UPDATE_DATE_TIME")
     private LocalDateTime updateDateTime;
+
     @Enumerated(STRING)
     private OrderStatus orderStatus;
+
     @Column(name = "SUM_PRICE", nullable = false)
-    private Double sumPrice;
+    private BigDecimal sumPrice;
+
     @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @JoinColumn(name = "USER_ID")
     private User user;
-    @OneToMany(mappedBy = "order", orphanRemoval = true)
+
+    @OneToMany(mappedBy = "order", fetch = EAGER, orphanRemoval = true)
     private List<PartOfTheOrder> parts;
 
 }

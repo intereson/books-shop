@@ -22,4 +22,5 @@ public class UserResponse {
     private List<RoleResponse> roleList;
     private List<OrderResponse> orders;
     private List<BookResponse> likedBooks;
+    private ShoppingCartResponse shoppingCart;
 }

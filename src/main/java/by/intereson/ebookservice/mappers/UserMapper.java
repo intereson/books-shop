@@ -6,9 +6,9 @@ import by.intereson.ebookservice.entities.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {BookListMapper.class,
-        RoleListMapper.class, OrderListMapper.class})
+        RoleListMapper.class, OrderListMapper.class,ShoppingCartMapper.class})
 public interface UserMapper {
-    UserResponse mapToDTO(User user);
+    UserResponse mapToDto(User user);
 
     User mapToEntity(CreateUserRequest request);
 }

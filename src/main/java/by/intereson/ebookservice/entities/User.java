@@ -10,8 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.PERSIST;
-import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
@@ -28,34 +28,40 @@ public class User {
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1, initialValue = 100)
     private Long id;
+
     @Column(name = "NAME", nullable = false)
     private String name;
+
     @Column(name = "FAMILY", nullable = false)
     private String surname;
+
     @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
+
     @Column(name = "LOGIN", nullable = false, unique = true)
     private String login;
+
     @Column(name = "PASSWORD", nullable = false)
     private String password;
+
     @CreationTimestamp
     @Column(name = "CREATE_TIME")
     private LocalDateTime createDateTime;
 
-    @ManyToMany(cascade = PERSIST)
+    @ManyToMany(cascade = PERSIST, fetch = EAGER)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
     private List<Role> roleList;
 
-    @OneToOne(cascade = {PERSIST, REMOVE})
+    @OneToOne(cascade = ALL, fetch = EAGER)
     @JoinColumn(name = "SHOPPING_CART_ID")
     private ShoppingCart shoppingCart;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = EAGER)
     private List<Order> orders;
 
-    @ManyToMany
+    @ManyToMany(fetch = EAGER)
     @JoinTable(name = "USER_LIKE_BOOK",
             joinColumns = {@JoinColumn(name = "USER_ID")},
             inverseJoinColumns = {@JoinColumn(name = "BOOK_ID")})

@@ -15,15 +15,22 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
     private final PartOfTheOrderService partOfTheOrderService;
 
-    @GetMapping("users/{id}/shopping-cart")
+    /**
+     * Get a shopping cart by id
+     */
+    @GetMapping("shopping-carts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartResponse getShoppingCart(@PathVariable Long id) {
-        return shoppingCartService.getShoppingCartDTO(id);
+    public ShoppingCartResponse getShoppingCartById(@PathVariable Long id) {
+        return shoppingCartService.getShoppingCartByIdDto(id);
     }
-
-    @DeleteMapping("users/{id}/shopping-cart")
+    /**
+     * Clear the shopping cart by id
+     * At the same time, parts of the order are deleted from the database
+     * and the number of available books and their reserved quantity are recalculated
+     */
+    @DeleteMapping("shopping-carts/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cleanShoppingCart(@PathVariable Long id) {
-        partOfTheOrderService.deleteAllPartsFromShoppingCartByUserId(id);
+    public void cleanShoppingCartById(@PathVariable Long id) {
+        partOfTheOrderService.deletePartsFromShoppingCartById(id);
     }
 }

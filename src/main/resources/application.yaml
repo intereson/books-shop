@@ -1,12 +1,13 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
         use_sql_comments: true
         format_sql: true
+    open-in-view: false
   datasource:
     url: jdbc:mysql://localhost:3306/jpaDB?createDatabaseIfNotExist=true
     username: root

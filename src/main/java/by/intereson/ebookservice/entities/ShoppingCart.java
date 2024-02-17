@@ -6,9 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
@@ -25,10 +27,11 @@ public class ShoppingCart {
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1, initialValue = 100)
     private Long idShoppingCart;
-    @Column(name = "SUM_PRICE")
-    private Double sumPrice;
 
-    @OneToMany(cascade = REMOVE, mappedBy = "shoppingCart")
+    @Column(name = "SUM_PRICE")
+    private BigDecimal sumPrice;
+
+    @OneToMany(cascade = REMOVE, fetch = EAGER, mappedBy = "shoppingCart")
     private List<PartOfTheOrder> parts;
 
     @OneToOne(mappedBy = "shoppingCart")

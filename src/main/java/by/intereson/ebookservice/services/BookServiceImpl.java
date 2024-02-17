@@ -11,10 +11,12 @@ import by.intereson.ebookservice.mappers.BookMapper;
 import by.intereson.ebookservice.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
+import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -24,37 +26,35 @@ public class BookServiceImpl implements BookService {
     private final BookListMapper bookListMapper;
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(isolation = READ_COMMITTED)
     public BookResponse createBook(CreateBookRequest request) {
         Book book = bookMapper.mapToEntity(request);
         bookRepository.save(book);
-        return bookMapper.mapToDTO(book);
+        return bookMapper.mapToDto(book);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Book getBookById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id:" + id));
+                .orElseThrow(() -> new ResourceNotFoundException(id.toString()));
     }
 
     @Override
-    public BookResponse getBookByIdDTO(Long id) {
+    public BookResponse getBookByIdDto(Long id) {
         Book book = getBookById(id);
-        return bookMapper.mapToDTO(book);
+        return bookMapper.mapToDto(book);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<BookResponse> getAllBooksUnsortedDTO() {
+    public List<BookResponse> getBooksUnsortedDto() {
         List<Book> books = bookRepository.findAll();
-        return bookListMapper.toDTOList(books);
+        return bookListMapper.mapListToDto(books);
     }
 
-
-
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = SERIALIZABLE)
     public BookResponse updateBookById(Long id, CreateBookRequest request) {
         Book newBook = bookMapper.mapToEntity(request);
         Book oldBook = getBookById(id);
@@ -68,49 +68,50 @@ public class BookServiceImpl implements BookService {
         oldBook.setQuantity(newBook.getQuantity());
         oldBook.setReserveQuantity(request.getReserveQuantity());
         bookRepository.save(oldBook);
-        return bookMapper.mapToDTO(oldBook);
+        return bookMapper.mapToDto(oldBook);
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = SERIALIZABLE)
     public void deleteBookById(Long id) {
         bookRepository.deleteById(id);
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = SERIALIZABLE)
     public void increaseInQuantityBook(Book book, Integer quantity) {
-        book.setQuantity(book.getQuantity()+quantity);
+        book.setQuantity(book.getQuantity() + quantity);
         bookRepository.save(book);
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = SERIALIZABLE)
     public void reduceFromQuantityBook(Book book, Integer quantity) {
-        int differenceQuantity=book.getQuantity()-quantity;
-        if(differenceQuantity<0){
-            throw new QuantityException("There is no such amount . There is only " + book.getQuantity());
-        }
-        else book.setQuantity(differenceQuantity);
-        bookRepository.save(book);
-            }
-    @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void reduceFromReserveQuantityBook(Book book, Integer quantity) {
-        book.setReserveQuantity(book.getReserveQuantity()-quantity);
+        int differenceQuantity = book.getQuantity() - quantity;
+        if (differenceQuantity < 0) {
+            throw new QuantityException(book.getQuantity().toString());
+        } else book.setQuantity(differenceQuantity);
         bookRepository.save(book);
     }
 
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void increaseInReserveQuantityBook(Book book, Integer quantity) {
-                        book.setReserveQuantity(book.getReserveQuantity()+quantity);
+    @Transactional(isolation = SERIALIZABLE)
+    public void reduceFromReserveQuantityBook(Book book, Integer quantity) {
+        book.setReserveQuantity(book.getReserveQuantity() - quantity);
         bookRepository.save(book);
     }
+
+    @Override
+    @Transactional(isolation = SERIALIZABLE)
+    public void increaseInReserveQuantityBook(Book book, Integer quantity) {
+        book.setReserveQuantity(book.getReserveQuantity() + quantity);
+        bookRepository.save(book);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<BookResponse> getBooksByGenre(GetBooksByGenreRequest request) {
         List<Book> booksByGenre = bookRepository.findBooksByGenre(request.getGenre());
-        return bookListMapper.toDTOList(booksByGenre);
+        return bookListMapper.mapListToDto(booksByGenre);
     }
 }

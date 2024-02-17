@@ -12,16 +12,21 @@ public interface BookService {
 
     Book getBookById(Long id);
 
-    BookResponse getBookByIdDTO(Long id);
+    BookResponse getBookByIdDto(Long id);
 
-    List<BookResponse> getAllBooksUnsortedDTO();
+    List<BookResponse> getBooksUnsortedDto();
+
     List<BookResponse> getBooksByGenre(GetBooksByGenreRequest request);
 
     BookResponse updateBookById(Long id, CreateBookRequest request);
 
     void deleteBookById(Long id);
+
     void reduceFromQuantityBook(Book book, Integer quantity);
+
     void increaseInQuantityBook(Book book, Integer quantity);
+
     void reduceFromReserveQuantityBook(Book book, Integer quantity);
+
     void increaseInReserveQuantityBook(Book book, Integer quantity);
 }

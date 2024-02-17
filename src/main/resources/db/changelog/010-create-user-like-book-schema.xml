@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
-    <changeSet id="004-create-user-like-book-schema" author="Sergey Lukashonak">
+    <changeSet id="010-create-user-like-book-schema" author="Sergey Lukashonak">
         <createTable tableName="user_like_book">
             <column name="user_id"
                     type="bigint">

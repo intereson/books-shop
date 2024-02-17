@@ -18,8 +18,6 @@ import static by.intereson.ebookservice.utils.Constants.LOG_RESPONSE_PATTERN;
 @Aspect
 @Component
 public class LoggerAspect {
-
-
     @Pointcut("execution(* by.intereson.ebookservice.controllers..*(..))")
     public void pointCut() {
     }

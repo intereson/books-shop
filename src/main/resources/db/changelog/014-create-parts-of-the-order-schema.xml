@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
-    <changeSet id="008-create-parts-of-the-order-schema" author="Sergey Lukashonak">
+    <changeSet id="014-create-parts-of-the-order-schema" author="Sergey Lukashonak">
         <createTable tableName="parts_of_the_order">
             <column name="id"
                     type="bigint"
@@ -51,6 +51,5 @@
         <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="shopping_cart_id"
                                  constraintName="parts_of_the_order_shopping_cart_id_constraint_key" referencedTableName="shopping_carts"
                                  referencedColumnNames="id_shopping_cart"/>
-
     </changeSet>
 </databaseChangeLog>

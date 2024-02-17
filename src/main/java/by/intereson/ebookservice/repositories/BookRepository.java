@@ -1,6 +1,5 @@
 package by.intereson.ebookservice.repositories;
 
-import by.intereson.ebookservice.dto.response.BookResponse;
 import by.intereson.ebookservice.entities.Book;
 import by.intereson.ebookservice.enums.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;

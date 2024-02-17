@@ -12,13 +12,13 @@ public interface UserService {
 
     User getUserById(Long id);
 
-    UserResponse getUserByIdDTO(Long id);
+    UserResponse getUserByIdDto(Long id);
 
-    List<UserResponse> getAllUsers();
+    List<UserResponse> getUsers();
 
-    UserResponse updateUserByIdDTO(Long id, CreateUserRequest request);
+    UserResponse updateUserByIdDto(Long id, CreateUserRequest request);
 
-    UserResponse updateLikedBooksByUserIdDTO(Long id, UpdateLikedBooksByUserRequest request);
+    UserResponse updateLikedBooksByUserIdDto(Long id, UpdateLikedBooksByUserRequest request);
 
     void deleteUserById(Long id);
 }

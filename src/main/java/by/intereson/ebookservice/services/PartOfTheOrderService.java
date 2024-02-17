@@ -14,16 +14,17 @@ public interface PartOfTheOrderService {
 
     PartOfTheOrder getPartOfTheOrderById(Long id);
 
-    PartOfTheOrderResponse getPartOfTheOrderByIdDTO(Long id);
+    PartOfTheOrderResponse getPartOfTheOrderByIdDto(Long id);
 
-    List<PartOfTheOrder> getAllPartsOfTheOrder();
+    List<PartOfTheOrder> getPartsOfTheOrder();
 
-    List<PartOfTheOrderResponse> getAllPartsOfTheOrderDTO();
+    List<PartOfTheOrderResponse> getPartsOfTheOrderDto();
 
     PartOfTheOrderResponse updatePartOfTheOrderById(Long id, UpdatePartOfTheOrderRequest request);
 
     void deletePartOfTheOrderById(Long id);
 
-    void deleteAllPartsFromShoppingCartByUserId(Long userId);
+    void deletePartsFromShoppingCartById(Long id);
+
     boolean isPresentQuantityBook(Book book, Integer quantity);
 }

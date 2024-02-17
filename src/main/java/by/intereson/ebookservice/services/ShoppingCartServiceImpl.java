@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import static by.intereson.ebookservice.utils.Constants.START_SUM_PRICE;
 
 @Service
@@ -18,32 +21,47 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
 
+
     @Override
-    public ShoppingCart setSumPriceInShoppingCart(Long idShoppingCart, Double sumPrise) {
-        ShoppingCart shoppingCart = getShoppingCart(idShoppingCart);
-        Double shoppingCartSumPrice = shoppingCart.getSumPrice();
-        shoppingCartSumPrice = shoppingCartSumPrice + sumPrise;
+    @Transactional(readOnly = true)
+    public ShoppingCart getShoppingCartById(Long idShoppingCart) {
+        return shoppingCartRepository.findById(idShoppingCart)
+                .orElseThrow(() -> new ResourceNotFoundException(idShoppingCart.toString()));
+    }
+
+    @Override
+    public void cleanSumPriceInShoppingCartById(Long idShoppingCart) {
+        getShoppingCartById(idShoppingCart).setSumPrice(START_SUM_PRICE);
+    }
+
+    @Override
+    public ShoppingCart addInSumPriceInShoppingCartById(Long idShoppingCart, BigDecimal sumPrise) {
+        ShoppingCart shoppingCart = getShoppingCartById(idShoppingCart);
+        BigDecimal shoppingCartSumPrice = shoppingCart.getSumPrice();
+        shoppingCartSumPrice = shoppingCartSumPrice.add(sumPrise);
         shoppingCart.setSumPrice(shoppingCartSumPrice);
         return shoppingCart;
     }
 
     @Override
-    public ShoppingCartResponse getShoppingCartDTO(Long idShoppingCart) {
-        ShoppingCart shoppingCart = getShoppingCart(idShoppingCart);
-        double sum = shoppingCart.getParts().stream().mapToDouble(PartOfTheOrder::getSumPrice).sum();
+    public void delFromSumPriceInShoppingCartById(Long idShoppingCart, BigDecimal delsumPrise) {
+        ShoppingCart shoppingCart = getShoppingCartById(idShoppingCart);
+        BigDecimal shoppingCartSumPrice = shoppingCart.getSumPrice();
+        shoppingCartSumPrice = shoppingCartSumPrice.subtract(delsumPrise);
+        shoppingCart.setSumPrice(shoppingCartSumPrice);
+        shoppingCartRepository.save(shoppingCart);
+    }
+
+    @Override
+    public ShoppingCartResponse getShoppingCartByIdDto(Long idShoppingCart) {
+        ShoppingCart shoppingCart = getShoppingCartById(idShoppingCart);
+        List<BigDecimal> decimals = shoppingCart.getParts().stream().map(PartOfTheOrder::getSumPrice).toList();
+        BigDecimal sum = START_SUM_PRICE;
+        for (BigDecimal bigDecimal : decimals) {
+            sum = sum.add(bigDecimal);
+        }
         shoppingCart.setSumPrice(sum);
-        return shoppingCartMapper.mapToDTO(shoppingCart);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ShoppingCart getShoppingCart(Long idShoppingCart) {
-        return shoppingCartRepository.findById(idShoppingCart)
-                .orElseThrow(() -> new ResourceNotFoundException("Shopping cart  not found with id:" + idShoppingCart));
-    }
-
-    @Override
-    public void cleanSumPriceInShoppingCart(Long idShoppingCart) {
-        getShoppingCart(idShoppingCart).setSumPrice(START_SUM_PRICE);
+        shoppingCartRepository.save(shoppingCart);
+        return shoppingCartMapper.mapToDto(shoppingCart);
     }
 }

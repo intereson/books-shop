@@ -20,8 +20,9 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1,initialValue = 4)
+    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1, initialValue = 4)
     private Long id;
+
     @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
