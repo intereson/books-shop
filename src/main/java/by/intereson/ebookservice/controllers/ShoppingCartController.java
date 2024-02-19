@@ -20,9 +20,10 @@ public class ShoppingCartController {
      */
     @GetMapping("shopping-carts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartResponse getShoppingCartById(@PathVariable Long id) {
-        return shoppingCartService.getShoppingCartByIdDto(id);
+    public ShoppingCartResponse getShoppingCartByShoppingCartId(@PathVariable Long id) {
+        return shoppingCartService.getShoppingCartByShoppingCartIdDto(id);
     }
+
     /**
      * Clear the shopping cart by id
      * At the same time, parts of the order are deleted from the database
@@ -31,6 +32,6 @@ public class ShoppingCartController {
     @DeleteMapping("shopping-carts/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cleanShoppingCartById(@PathVariable Long id) {
-        partOfTheOrderService.deletePartsFromShoppingCartById(id);
+        partOfTheOrderService.deletePartsFromShoppingCartByShoppingCartId(id);
     }
 }

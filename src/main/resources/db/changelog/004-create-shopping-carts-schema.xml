@@ -11,16 +11,17 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="sum_price"
-                    type="double">
+                    type="decimal(6,2)">
+                <constraints nullable="true"/>
             </column>
         </createTable>
         <insert tableName="shopping_carts">
             <column name="id_shopping_cart">1</column>
-            <column name="sum_price">0.0</column>
+            <column name="sum_price">0.00</column>
         </insert>
         <insert tableName="shopping_carts">
             <column name="id_shopping_cart">2</column>
-            <column name="sum_price">0.0</column>
+            <column name="sum_price">0.00</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

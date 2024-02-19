@@ -8,11 +8,11 @@ import java.math.BigDecimal;
 public interface ShoppingCartService {
     ShoppingCart getShoppingCartById(Long idShoppingCart);
 
-    ShoppingCartResponse getShoppingCartByIdDto(Long idShoppingCart);
+    ShoppingCartResponse getShoppingCartByShoppingCartIdDto(Long idShoppingCart);
 
     void cleanSumPriceInShoppingCartById(Long idShoppingCart);
 
-    ShoppingCart addInSumPriceInShoppingCartById(Long idShoppingCart, BigDecimal sumPrise);
+    ShoppingCart addSumPriceInShoppingCartById(Long idShoppingCart, BigDecimal sumPrise);
 
-    void delFromSumPriceInShoppingCartById(Long idShoppingCart, BigDecimal sumPrise);
+    void delSumPriceFromShoppingCartById(Long idShoppingCart, BigDecimal sumPrise);
 }

@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
         User user = getUserById(id);
         orderService.updateOrdersColumnUserId(user.getOrders());
-        partOfTheOrderService.deletePartsFromShoppingCartById(user.getShoppingCart().getIdShoppingCart());
+        partOfTheOrderService.deletePartsFromShoppingCartByShoppingCartId(user.getShoppingCart().getIdShoppingCart());
         userRepository.deleteById(id);
     }
 }

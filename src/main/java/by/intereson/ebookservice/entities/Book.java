@@ -43,7 +43,7 @@ public class Book {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "PRICE", nullable = false)
+    @Column(name = "PRICE")
     private BigDecimal price;
 
     @Column(name = "CREATE_TIME")

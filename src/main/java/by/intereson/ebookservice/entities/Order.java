@@ -43,7 +43,7 @@ public class Order {
     @Enumerated(STRING)
     private OrderStatus orderStatus;
 
-    @Column(name = "SUM_PRICE", nullable = false)
+    @Column(name = "SUM_PRICE")
     private BigDecimal sumPrice;
 
     @ManyToOne

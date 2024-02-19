@@ -34,8 +34,8 @@
                 <constraints nullable="true"/>
             </column>
             <column name="price"
-                    type="double">
-                <constraints nullable="false"/>
+                    type="decimal(6,2)" >
+                <constraints nullable="true" />
             </column>
             <column name="publishing_house"
                     type="varchar(255)">

@@ -49,7 +49,7 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
         BigDecimal sumPrise = price.multiply(BigDecimal.valueOf(quantity));
         partOfTheOrder.setSumPrice(sumPrise);
         partOfTheOrder.setQuantity(quantity);
-        ShoppingCart shoppingCart = shoppingCartService.addInSumPriceInShoppingCartById(request.getIdShoppingCart(), sumPrise);
+        ShoppingCart shoppingCart = shoppingCartService.addSumPriceInShoppingCartById(request.getIdShoppingCart(), sumPrise);
         partOfTheOrder.setShoppingCart(shoppingCart);
         partOfTheOrderRepository.save(partOfTheOrder);
         return partOfTheOrderMapper.mapToDto(partOfTheOrder);
@@ -67,7 +67,6 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
         return partOfTheOrderMapper.mapToDto(getPartOfTheOrderById(id));
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public List<PartOfTheOrder> getPartsOfTheOrder() {
@@ -78,7 +77,6 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
     public List<PartOfTheOrderResponse> getPartsOfTheOrderDto() {
         return partOfTheOrderListMapper.mapListToDto(getPartsOfTheOrder());
     }
-
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
@@ -102,27 +100,31 @@ public class PartOfTheOrderServiceImpl implements PartOfTheOrderService {
         PartOfTheOrder part = getPartOfTheOrderById(id);
         Long idShoppingCart = part.getShoppingCart().getIdShoppingCart();
         BigDecimal partSumPrice = part.getSumPrice();
-        shoppingCartService.delFromSumPriceInShoppingCartById(idShoppingCart, partSumPrice);
-        Integer quantity = part.getQuantity();
-        Book book = part.getBook();
-        bookService.reduceFromReserveQuantityBook(book, quantity);
-        bookService.increaseInQuantityBook(book, quantity);
+        shoppingCartService.delSumPriceFromShoppingCartById(idShoppingCart, partSumPrice);
+        updateQuantityBookAndReserveBookWhenDeletingPartOfTheOrder(part);
         partOfTheOrderRepository.deleteById(id);
     }
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
-    public void deletePartsFromShoppingCartById(Long id) {
+    public void deletePartsFromShoppingCartByShoppingCartId(Long id) {
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCartById(id);
         List<PartOfTheOrder> parts = shoppingCart.getParts();
         for (PartOfTheOrder part : parts) {
-            deletePartOfTheOrderById(part.getId());
+            updateQuantityBookAndReserveBookWhenDeletingPartOfTheOrder(part);
+            partOfTheOrderRepository.deleteById(part.getId());
         }
         shoppingCartService.cleanSumPriceInShoppingCartById(id);
     }
 
-    @Override
-    public boolean isPresentQuantityBook(Book book, Integer quantity) {
+    private void updateQuantityBookAndReserveBookWhenDeletingPartOfTheOrder(PartOfTheOrder part) {
+        Integer quantity = part.getQuantity();
+        Book book = part.getBook();
+        bookService.reduceFromReserveQuantityBook(book, quantity);
+        bookService.increaseInQuantityBook(book, quantity);
+    }
+
+    private boolean isPresentQuantityBook(Book book, Integer quantity) {
         return book.getQuantity() >= quantity;
     }
 }

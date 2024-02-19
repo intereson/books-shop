@@ -18,12 +18,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="price_book"
-                    type="double">
+                    type="decimal(6,2)">
                 <constraints nullable="true"/>
             </column>
             <column name="sum_price"
-                    type="double">
-                <constraints nullable="false"/>
+                    type="decimal(6,2)">
+                <constraints nullable="true"/>
             </column>
             <column name="quantity"
                     type="int">

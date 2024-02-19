@@ -47,23 +47,14 @@ public class OrderServiceImpl implements OrderService {
             throw new ShoppingCartIsEmptyException(request.getIdUser().toString());
         }
         Order order = new Order();
-        order.setOrderStatus(OrderStatus.NEW);
         List<PartOfTheOrder> parts = shoppingCart.getParts();
-        BigDecimal sum = START_SUM_PRICE;
-        for (PartOfTheOrder varPart : parts) {
-            sum = varPart.getSumPrice().add(sum);
-            varPart.setOrder(order);
-            varPart.setShoppingCart(null);
-            Integer quantity = varPart.getQuantity();
-            bookService.reduceFromReserveQuantityBook(varPart.getBook(), quantity);
-        }
-        order.setSumPrice(sum);
+        order.setSumPrice(getSumPrice(parts, order));
+        order.setOrderStatus(OrderStatus.NEW);
         order.setUser(shoppingCart.getUser());
         shoppingCart.setSumPrice(START_SUM_PRICE);
         shoppingCartService.cleanSumPriceInShoppingCartById(request.getIdUser());
         orderRepository.save(order);
         return orderMapper.mapToDto(order);
-
     }
 
     @Override
@@ -112,5 +103,17 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrdersColumnUserId(List<Order> orders) {
         orders.forEach(order -> order.setUser(null));
         orderRepository.saveAll(orders);
+    }
+
+    private BigDecimal getSumPrice(List<PartOfTheOrder> parts, Order order) {
+        BigDecimal sum = START_SUM_PRICE;
+        for (PartOfTheOrder varPart : parts) {
+            sum = varPart.getSumPrice().add(sum);
+            varPart.setOrder(order);
+            varPart.setShoppingCart(null);
+            Integer quantity = varPart.getQuantity();
+            bookService.reduceFromReserveQuantityBook(varPart.getBook(), quantity);
+        }
+        return sum;
     }
 }

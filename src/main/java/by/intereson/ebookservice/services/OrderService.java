@@ -5,7 +5,9 @@ import by.intereson.ebookservice.dto.requests.GetOrdersByOrderStatus;
 import by.intereson.ebookservice.dto.requests.UpdateOrderStatusRequest;
 import by.intereson.ebookservice.dto.response.OrderResponse;
 import by.intereson.ebookservice.entities.Order;
+import by.intereson.ebookservice.entities.PartOfTheOrder;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
@@ -26,4 +28,5 @@ public interface OrderService {
     void deleteOrder(Long id);
 
     void updateOrdersColumnUserId(List<Order> orders);
+
 }
