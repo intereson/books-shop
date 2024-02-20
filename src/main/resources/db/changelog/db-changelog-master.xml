@@ -16,6 +16,6 @@
     <include file="db/changelog/010-create-user-like-book-schema.xml"/>
     <include file="db/changelog/011-create-order-seq-schema.xml"/>
     <include file="db/changelog/012-create-orders-schema.xml"/>
-    <include file="db/changelog/013-create-part-of-the-order-seq-schema.xml"/>
-    <include file="db/changelog/014-create-parts-of-the-order-schema.xml"/>
+    <include file="db/changelog/013-create-order-detail-seq-schema.xml"/>
+    <include file="db/changelog/014-create-order-details-schema.xml"/>
 </databaseChangeLog>

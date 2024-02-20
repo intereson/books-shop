@@ -26,13 +26,13 @@ public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
     @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1, initialValue = 100)
-    private Long idShoppingCart;
+    private Long id;
 
     @Column(name = "SUM_PRICE")
     private BigDecimal sumPrice;
 
     @OneToMany(cascade = REMOVE, fetch = EAGER, mappedBy = "shoppingCart")
-    private List<PartOfTheOrder> parts;
+    private List<OrderDetail> details;
 
     @OneToOne(mappedBy = "shoppingCart")
     private User user;

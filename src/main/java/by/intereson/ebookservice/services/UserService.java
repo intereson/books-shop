@@ -1,7 +1,7 @@
 package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreateUserRequest;
-import by.intereson.ebookservice.dto.requests.UpdateLikedBooksByUserRequest;
+import by.intereson.ebookservice.dto.requests.UpdateBookLikeRequest;
 import by.intereson.ebookservice.dto.response.UserResponse;
 import by.intereson.ebookservice.entities.User;
 
@@ -10,15 +10,15 @@ import java.util.List;
 public interface UserService {
     UserResponse createUser(CreateUserRequest request);
 
-    User getUserById(Long id);
+    User getUser(Long userId);
 
-    UserResponse getUserByIdDto(Long id);
+    UserResponse getUserResponse(Long userId);
 
     List<UserResponse> getUsers();
 
-    UserResponse updateUserByIdDto(Long id, CreateUserRequest request);
+    UserResponse updateUser(Long userId, CreateUserRequest request);
 
-    UserResponse updateLikedBooksByUserIdDto(Long id, UpdateLikedBooksByUserRequest request);
+    UserResponse updateBookLike(Long userId, UpdateBookLikeRequest request);
 
-    void deleteUserById(Long id);
+    void deleteUser(Long userId);
 }

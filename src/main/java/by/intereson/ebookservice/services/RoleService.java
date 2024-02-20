@@ -9,15 +9,15 @@ import java.util.List;
 public interface RoleService {
     RoleResponse createRole(CreateAndUpdateRoleRequest request);
 
-    Role getRoleById(Long id);
+    Role getRole(Long roleId);
 
-    RoleResponse getRoleByIdDto(Long id);
+    RoleResponse getRoleResponse(Long roleId);
 
-    Role getRoleByName(String name);
+    Role getRoleByRoleName(String roleName);
 
     List<RoleResponse> getRoles();
 
-    RoleResponse updateRoleById(Long id, CreateAndUpdateRoleRequest request);
+    RoleResponse updateRole(Long roleId, CreateAndUpdateRoleRequest request);
 
-    void deleteRoleById(Long id);
+    void deleteRole(Long roleId);
 }

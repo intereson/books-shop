@@ -6,7 +6,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
     <changeSet id="004-create-shopping-carts-schema" author="Sergey Lukashonak">
         <createTable tableName="shopping_carts">
-            <column name="id_shopping_cart"
+            <column name="id"
                     type="bigint">
                 <constraints primaryKey="true"/>
             </column>
@@ -16,11 +16,11 @@
             </column>
         </createTable>
         <insert tableName="shopping_carts">
-            <column name="id_shopping_cart">1</column>
+            <column name="id">1</column>
             <column name="sum_price">0.00</column>
         </insert>
         <insert tableName="shopping_carts">
-            <column name="id_shopping_cart">2</column>
+            <column name="id">2</column>
             <column name="sum_price">0.00</column>
         </insert>
     </changeSet>

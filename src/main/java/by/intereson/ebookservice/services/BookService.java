@@ -10,17 +10,17 @@ import java.util.List;
 public interface BookService {
     BookResponse createBook(CreateBookRequest request);
 
-    Book getBookById(Long id);
+    Book getBook(Long bookId);
 
-    BookResponse getBookByIdDto(Long id);
+    BookResponse getBookResponse(Long bookId);
 
-    List<BookResponse> getBooksUnsortedDto();
+    List<BookResponse> getBooksUnsorted();
 
     List<BookResponse> getBooksByGenre(GetBooksByGenreRequest request);
 
-    BookResponse updateBookById(Long id, CreateBookRequest request);
+    BookResponse updateBook(Long bookId, CreateBookRequest request);
 
-    void deleteBookById(Long id);
+    void deleteBook(Long bookId);
 
     void reduceFromQuantityBook(Book book, Integer quantity);
 

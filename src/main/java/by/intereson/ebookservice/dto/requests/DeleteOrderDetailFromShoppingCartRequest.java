@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeletePartOfTheOrderFromShoppingCartRequest {
+public class DeleteOrderDetailFromShoppingCartRequest {
     @NotNull
-    private Long idPartOfTheOrder;
+    private Long orderDetailId;
 }

@@ -4,8 +4,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
-    <changeSet id="014-create-parts-of-the-order-schema" author="Sergey Lukashonak">
-        <createTable tableName="parts_of_the_order">
+    <changeSet id="014-create-order-details-schema" author="Sergey Lukashonak">
+        <createTable tableName="order_details">
             <column name="id"
                     type="bigint"
                     autoIncrement="true">
@@ -42,14 +42,14 @@
                 <constraints nullable="true"/>
             </column>
         </createTable>
-         <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="order_id"
-                                 constraintName="parts_of_the_order_order_id_constraint_key" referencedTableName="orders"
+         <addForeignKeyConstraint baseTableName="order_details" baseColumnNames="order_id"
+                                 constraintName="order_details_order_id_constraint_key" referencedTableName="orders"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="book_id"
-                                 constraintName="parts_of_the_order_book_id_constraint_key" referencedTableName="books"
+        <addForeignKeyConstraint baseTableName="order_details" baseColumnNames="book_id"
+                                 constraintName="order_details_book_id_constraint_key" referencedTableName="books"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="parts_of_the_order" baseColumnNames="shopping_cart_id"
-                                 constraintName="parts_of_the_order_shopping_cart_id_constraint_key" referencedTableName="shopping_carts"
-                                 referencedColumnNames="id_shopping_cart"/>
+        <addForeignKeyConstraint baseTableName="order_details" baseColumnNames="shopping_cart_id"
+                                 constraintName="order_details_shopping_cart_id_constraint_key" referencedTableName="shopping_carts"
+                                 referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>

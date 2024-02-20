@@ -4,8 +4,8 @@ import by.intereson.ebookservice.dto.requests.CreateBookRequest;
 import by.intereson.ebookservice.dto.requests.GetBooksByGenreRequest;
 import by.intereson.ebookservice.dto.response.BookResponse;
 import by.intereson.ebookservice.entities.Book;
-import by.intereson.ebookservice.exceptions.QuantityException;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
+import by.intereson.ebookservice.exceptions.QuantityException;
 import by.intereson.ebookservice.mappers.BookListMapper;
 import by.intereson.ebookservice.mappers.BookMapper;
 import by.intereson.ebookservice.repositories.BookRepository;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static by.intereson.ebookservice.utils.Constants.START_INTEGER_NULL_INDEX;
 import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
@@ -35,29 +36,29 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public Book getBookById(Long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id.toString()));
+    public Book getBook(Long bookId) {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResourceNotFoundException(bookId));
     }
 
     @Override
-    public BookResponse getBookByIdDto(Long id) {
-        Book book = getBookById(id);
+    public BookResponse getBookResponse(Long bookId) {
+        Book book = getBook(bookId);
         return bookMapper.mapToDto(book);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<BookResponse> getBooksUnsortedDto() {
+    public List<BookResponse> getBooksUnsorted() {
         List<Book> books = bookRepository.findAll();
         return bookListMapper.mapListToDto(books);
     }
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
-    public BookResponse updateBookById(Long id, CreateBookRequest request) {
+    public BookResponse updateBook(Long bookId, CreateBookRequest request) {
         Book newBook = bookMapper.mapToEntity(request);
-        Book oldBook = getBookById(id);
+        Book oldBook = getBook(bookId);
         oldBook.setBookName(newBook.getBookName());
         oldBook.setAuthor(newBook.getAuthor());
         oldBook.setPublishingYear(newBook.getPublishingYear());
@@ -73,8 +74,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
-    public void deleteBookById(Long id) {
-        bookRepository.deleteById(id);
+    public void deleteBook(Long bookId) {
+        bookRepository.deleteById(bookId);
     }
 
     @Override
@@ -88,8 +89,8 @@ public class BookServiceImpl implements BookService {
     @Transactional(isolation = SERIALIZABLE)
     public void reduceFromQuantityBook(Book book, Integer quantity) {
         int differenceQuantity = book.getQuantity() - quantity;
-        if (differenceQuantity < 0) {
-            throw new QuantityException(book.getQuantity().toString());
+        if (differenceQuantity < START_INTEGER_NULL_INDEX) {
+            throw new QuantityException(book.getQuantity());
         } else book.setQuantity(differenceQuantity);
         bookRepository.save(book);
     }

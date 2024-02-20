@@ -1,18 +1,19 @@
 package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreateOrderRequest;
-import by.intereson.ebookservice.dto.requests.GetOrdersByOrderStatus;
+import by.intereson.ebookservice.dto.requests.GetOrdersByStatus;
+import by.intereson.ebookservice.dto.requests.GetOrdersByStatusAndMoreThenPrice;
 import by.intereson.ebookservice.dto.requests.UpdateOrderStatusRequest;
 import by.intereson.ebookservice.dto.response.OrderResponse;
 import by.intereson.ebookservice.entities.Order;
-import by.intereson.ebookservice.entities.PartOfTheOrder;
+import by.intereson.ebookservice.entities.OrderDetail;
 import by.intereson.ebookservice.entities.ShoppingCart;
 import by.intereson.ebookservice.enums.OrderStatus;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.exceptions.ShoppingCartIsEmptyException;
 import by.intereson.ebookservice.mappers.OrderListMapper;
 import by.intereson.ebookservice.mappers.OrderMapper;
-import by.intereson.ebookservice.repositories.OrderRepository;
+import by.intereson.ebookservice.repositories.order.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,45 +35,52 @@ public class OrderServiceImpl implements OrderService {
     private final BookService bookService;
 
     @Override
-    public List<OrderResponse> getOrdersByStatusDto(GetOrdersByOrderStatus request) {
+    public List<OrderResponse> getOrdersByStatus(GetOrdersByStatus request) {
         List<Order> orders = orderRepository.getOrdersByOrderStatus(request.getOrderStatus());
+        return orderListMapper.mapToDto(orders);
+    }
+
+    @Override
+    public List<OrderResponse> getOrdersByStatusAndSumMoreThenPrice(GetOrdersByStatusAndMoreThenPrice request) {
+        List<Order> orders = orderRepository
+                .findOrdersByStatusAndSumPriceMoreRequestPrice(request.getOrderStatus(), request.getPrice());
         return orderListMapper.mapToDto(orders);
     }
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
     public OrderResponse createOrder(CreateOrderRequest request) {
-        ShoppingCart shoppingCart = shoppingCartService.getShoppingCartById(request.getIdUser());
-        if (shoppingCart.getParts().isEmpty()) {
-            throw new ShoppingCartIsEmptyException(request.getIdUser().toString());
+        ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(request.getUserId());
+        if (shoppingCart.getDetails().isEmpty()) {
+            throw new ShoppingCartIsEmptyException(request.getUserId());
         }
         Order order = new Order();
-        List<PartOfTheOrder> parts = shoppingCart.getParts();
-        order.setSumPrice(getSumPrice(parts, order));
+        List<OrderDetail> details = shoppingCart.getDetails();
+        order.setSumPrice(getSumPrice(details, order));
         order.setOrderStatus(OrderStatus.NEW);
         order.setUser(shoppingCart.getUser());
         shoppingCart.setSumPrice(START_SUM_PRICE);
-        shoppingCartService.cleanSumPriceInShoppingCartById(request.getIdUser());
+        shoppingCartService.cleanSumPriceInShoppingCart(request.getUserId());
         orderRepository.save(order);
         return orderMapper.mapToDto(order);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Order getOrderById(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id.toString()));
+    public Order getOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException(orderId));
     }
 
     @Override
-    public OrderResponse getOrderByIdDto(Long id) {
-        Order order = getOrderById(id);
+    public OrderResponse getOrderResponse(Long orderId) {
+        Order order = getOrder(orderId);
         return orderMapper.mapToDto(order);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrderResponse> getOrdersByUserIdDto(Long userId) {
+    public List<OrderResponse> getOrdersByUserId(Long userId) {
         List<Order> ordersByUserId = orderRepository.getOrdersByUserId(userId);
         return orderListMapper.mapToDto(ordersByUserId);
     }
@@ -86,8 +94,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
-    public OrderResponse updateOrderStatusById(Long id, UpdateOrderStatusRequest request) {
-        Order order = getOrderById(id);
+    public OrderResponse updateOrderStatus(Long orderId, UpdateOrderStatusRequest request) {
+        Order order = getOrder(orderId);
         order.setOrderStatus(request.getStatus());
         orderRepository.save(order);
         return orderMapper.mapToDto(order);
@@ -95,8 +103,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
-    public void deleteOrder(Long id) {
-        orderRepository.deleteById(id);
+    public void deleteOrder(Long orderId) {
+        orderRepository.deleteById(orderId);
     }
 
     @Override
@@ -105,9 +113,9 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.saveAll(orders);
     }
 
-    private BigDecimal getSumPrice(List<PartOfTheOrder> parts, Order order) {
+    private BigDecimal getSumPrice(List<OrderDetail> parts, Order order) {
         BigDecimal sum = START_SUM_PRICE;
-        for (PartOfTheOrder varPart : parts) {
+        for (OrderDetail varPart : parts) {
             sum = varPart.getSumPrice().add(sum);
             varPart.setOrder(order);
             varPart.setShoppingCart(null);

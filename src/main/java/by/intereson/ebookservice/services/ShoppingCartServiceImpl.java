@@ -22,21 +22,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional(readOnly = true)
-    public ShoppingCart getShoppingCartById(Long idShoppingCart) {
-        return shoppingCartRepository.findById(idShoppingCart)
-                .orElseThrow(() -> new ResourceNotFoundException(idShoppingCart.toString()));
+    public ShoppingCart getShoppingCart(Long shoppingCartId) {
+        return shoppingCartRepository.findById(shoppingCartId)
+                .orElseThrow(() -> new ResourceNotFoundException(shoppingCartId));
     }
 
     @Override
-    public void cleanSumPriceInShoppingCartById(Long idShoppingCart) {
-        ShoppingCart shoppingCart = getShoppingCartById(idShoppingCart);
+    public void cleanSumPriceInShoppingCart(Long shoppingCartId) {
+        ShoppingCart shoppingCart = getShoppingCart(shoppingCartId);
         shoppingCart.setSumPrice(START_SUM_PRICE);
         shoppingCartRepository.save(shoppingCart);
     }
 
     @Override
-    public ShoppingCart addSumPriceInShoppingCartById(Long idShoppingCart, BigDecimal sumPriseInPart) {
-        ShoppingCart shoppingCart = getShoppingCartById(idShoppingCart);
+    public ShoppingCart addSumPriceInShoppingCart(Long shoppingCartId, BigDecimal sumPriseInPart) {
+        ShoppingCart shoppingCart = getShoppingCart(shoppingCartId);
         BigDecimal shoppingCartSumPrice = shoppingCart.getSumPrice();
         shoppingCartSumPrice = shoppingCartSumPrice.add(sumPriseInPart);
         shoppingCart.setSumPrice(shoppingCartSumPrice);
@@ -44,8 +44,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void delSumPriceFromShoppingCartById(Long idShoppingCart, BigDecimal sumPriseInPart) {
-        ShoppingCart shoppingCart = getShoppingCartById(idShoppingCart);
+    public void delSumPriceFromShoppingCart(Long shoppingCartId, BigDecimal sumPriseInPart) {
+        ShoppingCart shoppingCart = getShoppingCart(shoppingCartId);
         BigDecimal shoppingCartSumPrice = shoppingCart.getSumPrice();
         shoppingCartSumPrice = shoppingCartSumPrice.subtract(sumPriseInPart);
         shoppingCart.setSumPrice(shoppingCartSumPrice);
@@ -53,7 +53,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartResponse getShoppingCartByShoppingCartIdDto(Long userId) {
-        return shoppingCartMapper.mapToDto(getShoppingCartById(userId));
+    public ShoppingCartResponse getShoppingCartResponse(Long shoppingCartId) {
+        return shoppingCartMapper.mapToDto(getShoppingCart(shoppingCartId));
     }
 }

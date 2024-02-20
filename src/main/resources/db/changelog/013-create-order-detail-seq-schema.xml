@@ -4,14 +4,14 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
-    <changeSet id="013-create-part-of-the-order-seq-schema" author="Sergey Lukashonak">
-        <createTable tableName="part_of_the_order_seq">
+    <changeSet id="013-create-order-detail-seq-schema" author="Sergey Lukashonak">
+        <createTable tableName="order_detail_seq">
             <column name="next_val"
                     type="bigint">
                 <constraints nullable="true"/>
             </column>
         </createTable>
-        <insert tableName="part_of_the_order_seq">
+        <insert tableName="order_detail_seq">
             <column name="next_val">1</column>
         </insert>
     </changeSet>

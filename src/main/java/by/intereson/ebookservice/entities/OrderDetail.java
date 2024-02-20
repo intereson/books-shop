@@ -15,9 +15,9 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "PARTS_OF_THE_ORDER")
-public class PartOfTheOrder {
-    private static final String SEQ_NAME = "PART_OF_THE_ORDER_SEQ";
+@Table(name = "ORDER_DETAILS")
+public class OrderDetail {
+    private static final String SEQ_NAME = "ORDER_DETAIL_SEQ";
 
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)

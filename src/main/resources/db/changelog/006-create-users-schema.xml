@@ -44,7 +44,7 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="users" baseColumnNames="shopping_cart_id"
                                  constraintName="shopping_cart_id_users_id" referencedTableName="shopping_carts"
-                                 referencedColumnNames="id_shopping_cart" onUpdate="CASCADE" onDelete="CASCADE"/>
+                                 referencedColumnNames="id" onUpdate="CASCADE" onDelete="CASCADE"/>
         <insert tableName="users">
             <column name="name">Andrey</column>
             <column name="family">Petrov</column>

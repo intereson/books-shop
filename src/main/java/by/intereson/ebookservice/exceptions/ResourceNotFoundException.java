@@ -1,8 +1,9 @@
 package by.intereson.ebookservice.exceptions;
 
-public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String message) {
-        super(message);
+import jakarta.persistence.EntityNotFoundException;
+
+public class ResourceNotFoundException extends EntityNotFoundException {
+    public ResourceNotFoundException(Long message) {
+        super(message.toString());
     }
 }
-

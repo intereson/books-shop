@@ -9,6 +9,5 @@ import org.mapstruct.Mapper;
         RoleListMapper.class, OrderListMapper.class,ShoppingCartMapper.class})
 public interface UserMapper {
     UserResponse mapToDto(User user);
-
     User mapToEntity(CreateUserRequest request);
 }

@@ -51,6 +51,6 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order", fetch = EAGER, orphanRemoval = true)
-    private List<PartOfTheOrder> parts;
+    private List<OrderDetail> details;
 
 }

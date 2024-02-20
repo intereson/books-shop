@@ -17,23 +17,29 @@ import java.math.BigDecimal;
 public class CreateBookRequest {
     @NotBlank
     private String bookName;
+
     @NotBlank
     private String author;
+
     @NotNull
     private Integer publishingYear;
-    @NotNull
+
+    @NotBlank
     private String publishingHouse;
-    @NotNull
+
+    @NotBlank
     private String description;
-    @NotNull
+
     @PositiveOrZero
     private BigDecimal price;
+
     @NotNull
     private Genre genre;
+
     @NotNull
     @Min(1)
     private Integer quantity;
-    @NotNull
+
     @PositiveOrZero
     private Integer reserveQuantity;
 }

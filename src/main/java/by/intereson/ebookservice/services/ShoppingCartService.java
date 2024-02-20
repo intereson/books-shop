@@ -6,13 +6,13 @@ import by.intereson.ebookservice.entities.ShoppingCart;
 import java.math.BigDecimal;
 
 public interface ShoppingCartService {
-    ShoppingCart getShoppingCartById(Long idShoppingCart);
+    ShoppingCart getShoppingCart(Long shoppingCartId);
 
-    ShoppingCartResponse getShoppingCartByShoppingCartIdDto(Long idShoppingCart);
+    ShoppingCartResponse getShoppingCartResponse(Long shoppingCartId);
 
-    void cleanSumPriceInShoppingCartById(Long idShoppingCart);
+    void cleanSumPriceInShoppingCart(Long shoppingCartId);
 
-    ShoppingCart addSumPriceInShoppingCartById(Long idShoppingCart, BigDecimal sumPrise);
+    ShoppingCart addSumPriceInShoppingCart(Long shoppingCartId, BigDecimal sumPrise);
 
-    void delSumPriceFromShoppingCartById(Long idShoppingCart, BigDecimal sumPrise);
+    void delSumPriceFromShoppingCart(Long shoppingCartId, BigDecimal sumPrise);
 }

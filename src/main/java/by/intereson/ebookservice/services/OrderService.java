@@ -1,31 +1,31 @@
 package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreateOrderRequest;
-import by.intereson.ebookservice.dto.requests.GetOrdersByOrderStatus;
+import by.intereson.ebookservice.dto.requests.GetOrdersByStatus;
+import by.intereson.ebookservice.dto.requests.GetOrdersByStatusAndMoreThenPrice;
 import by.intereson.ebookservice.dto.requests.UpdateOrderStatusRequest;
 import by.intereson.ebookservice.dto.response.OrderResponse;
 import by.intereson.ebookservice.entities.Order;
-import by.intereson.ebookservice.entities.PartOfTheOrder;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
     OrderResponse createOrder(CreateOrderRequest request);
 
-    Order getOrderById(Long id);
+    Order getOrder(Long orderId);
 
-    OrderResponse getOrderByIdDto(Long id);
+    OrderResponse getOrderResponse(Long orderId);
 
-    List<OrderResponse> getOrdersByUserIdDto(Long userId);
+    List<OrderResponse> getOrdersByUserId(Long userId);
 
     List<OrderResponse> getOrders();
 
-    List<OrderResponse> getOrdersByStatusDto(GetOrdersByOrderStatus request);
+    List<OrderResponse> getOrdersByStatus(GetOrdersByStatus request);
+    List<OrderResponse> getOrdersByStatusAndSumMoreThenPrice(GetOrdersByStatusAndMoreThenPrice request);
 
-    OrderResponse updateOrderStatusById(Long id, UpdateOrderStatusRequest request);
+    OrderResponse updateOrderStatus(Long orderId, UpdateOrderStatusRequest request);
 
-    void deleteOrder(Long id);
+    void deleteOrder(Long orderId);
 
     void updateOrdersColumnUserId(List<Order> orders);
 

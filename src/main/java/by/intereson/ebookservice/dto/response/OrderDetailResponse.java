@@ -5,14 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PartOfTheOrderResponse {
+public class OrderDetailResponse {
     private Long id;
-    private Double price;
-    private Double sumPrice;
+    private BigDecimal price;
+    private BigDecimal sumPrice;
     private Integer quantity;
     private String bookName;
 

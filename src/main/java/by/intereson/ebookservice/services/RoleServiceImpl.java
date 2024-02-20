@@ -7,6 +7,7 @@ import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.mappers.RoleListMapper;
 import by.intereson.ebookservice.mappers.RoleMapper;
 import by.intereson.ebookservice.repositories.RoleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,22 +35,22 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(readOnly = true)
-    public Role getRoleById(Long id) {
-        return roleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id.toString()));
+    public Role getRole(Long roleId) {
+        return roleRepository.findById(roleId)
+                .orElseThrow(() -> new EntityNotFoundException(roleId.toString()));
     }
 
     @Override
-    public RoleResponse getRoleByIdDto(Long id) {
-        Role role = getRoleById(id);
+    public RoleResponse getRoleResponse(Long roleId) {
+        Role role = getRole(roleId);
         return roleMapper.mapToDto(role);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Role getRoleByName(String name) {
-        return roleRepository.getRoleByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException(name));
+    public Role getRoleByRoleName(String roleName) {
+        return roleRepository.getRoleByRoleName(roleName)
+                .orElseThrow(() -> new EntityNotFoundException(roleName));
     }
 
     @Override
@@ -62,17 +63,17 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
-    public RoleResponse updateRoleById(Long id, CreateAndUpdateRoleRequest request) {
-        Role role = getRoleById(id);
-        role.setName(request.getName());
+    public RoleResponse updateRole(Long roleId, CreateAndUpdateRoleRequest request) {
+        Role role = getRole(roleId);
+        role.setRoleName(request.getRoleName());
         roleRepository.save(role);
         return roleMapper.mapToDto(role);
     }
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
-    public void deleteRoleById(Long id) {
-        roleRepository.deleteById(id);
+    public void deleteRole(Long roleId) {
+        roleRepository.deleteById(roleId);
     }
 
 }
