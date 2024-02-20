@@ -37,6 +37,9 @@ public class Book {
     @Column(name = "PUBLISHING_YEAR")
     private Integer publishingYear;
 
+    @Column(name = "FIRST_PUBLISH_YEAR")
+    private Integer firstPublishYear;
+
     @Column(name = "PUBLISHING_HOUSE")
     private String publishingHouse;
 

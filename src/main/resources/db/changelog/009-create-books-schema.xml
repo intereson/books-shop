@@ -45,6 +45,10 @@
                     type="int">
                 <constraints nullable="true"/>
             </column>
+            <column name="first_publish_year"
+                    type="int">
+                <constraints nullable="true"/>
+            </column>
             <column name="quantity"
                     type="int">
                 <constraints nullable="false"/>

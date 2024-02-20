@@ -3,9 +3,12 @@ package by.intereson.ebookservice.services;
 import by.intereson.ebookservice.dto.requests.CreateBookRequest;
 import by.intereson.ebookservice.dto.requests.GetBooksByGenreRequest;
 import by.intereson.ebookservice.dto.response.BookResponse;
+import by.intereson.ebookservice.dto.response.OpenLibraryResponse;
+import by.intereson.ebookservice.dto.response.OpenLibraryRootResponse;
 import by.intereson.ebookservice.entities.Book;
-import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.exceptions.QuantityException;
+import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
+import by.intereson.ebookservice.gateways.OpenLibraryGateway;
 import by.intereson.ebookservice.mappers.BookListMapper;
 import by.intereson.ebookservice.mappers.BookMapper;
 import by.intereson.ebookservice.repositories.BookRepository;
@@ -25,11 +28,13 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BookListMapper bookListMapper;
+    private final OpenLibraryGateway openLibraryGateway;
 
     @Override
     @Transactional(isolation = READ_COMMITTED)
     public BookResponse createBook(CreateBookRequest request) {
         Book book = bookMapper.mapToEntity(request);
+        setFirstPublishYearFromOpenLibrary(book);
         bookRepository.save(book);
         return bookMapper.mapToDto(book);
     }
@@ -57,19 +62,10 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(isolation = SERIALIZABLE)
     public BookResponse updateBook(Long bookId, CreateBookRequest request) {
-        Book newBook = bookMapper.mapToEntity(request);
-        Book oldBook = getBook(bookId);
-        oldBook.setBookName(newBook.getBookName());
-        oldBook.setAuthor(newBook.getAuthor());
-        oldBook.setPublishingYear(newBook.getPublishingYear());
-        oldBook.setPublishingHouse(newBook.getPublishingHouse());
-        oldBook.setDescription(newBook.getDescription());
-        oldBook.setGenre(newBook.getGenre());
-        oldBook.setPrice(newBook.getPrice());
-        oldBook.setQuantity(newBook.getQuantity());
-        oldBook.setReserveQuantity(request.getReserveQuantity());
-        bookRepository.save(oldBook);
-        return bookMapper.mapToDto(oldBook);
+        Book book = bookMapper.mapToEntity(request);
+        getUpdatedBook(bookId, request, book);
+        bookRepository.save(book);
+        return bookMapper.mapToDto(book);
     }
 
     @Override
@@ -114,5 +110,26 @@ public class BookServiceImpl implements BookService {
     public List<BookResponse> getBooksByGenre(GetBooksByGenreRequest request) {
         List<Book> booksByGenre = bookRepository.findBooksByGenre(request.getGenre());
         return bookListMapper.mapListToDto(booksByGenre);
+    }
+
+    private void setFirstPublishYearFromOpenLibrary(Book book) {
+        openLibraryGateway.setRequest(book.getBookName());
+        OpenLibraryRootResponse bookInfo = openLibraryGateway.getBookInfo();
+        OpenLibraryResponse openLibraryResponse = bookInfo.getDocs().stream().findFirst().orElseThrow();
+        Integer firstPublishYear = openLibraryResponse.getFirst_publish_year();
+        book.setFirstPublishYear(firstPublishYear);
+    }
+
+    private void getUpdatedBook(Long bookId, CreateBookRequest request, Book book) {
+        book.setId(bookId);
+        book.setBookName(book.getBookName());
+        book.setAuthor(book.getAuthor());
+        book.setPublishingYear(book.getPublishingYear());
+        book.setPublishingHouse(book.getPublishingHouse());
+        book.setDescription(book.getDescription());
+        book.setGenre(book.getGenre());
+        book.setPrice(book.getPrice());
+        book.setQuantity(book.getQuantity());
+        book.setReserveQuantity(request.getReserveQuantity());
     }
 }

@@ -2,6 +2,7 @@ package by.intereson.ebookservice.configurations;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 public class ApplicationConfig {
 
     @Bean
+    @ConditionalOnProperty(value = "services.external.library.url")
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

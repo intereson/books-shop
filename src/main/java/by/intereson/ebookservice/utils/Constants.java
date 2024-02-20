@@ -47,6 +47,9 @@ public class Constants {
     public static final String USERS_ID_URL = "users/{id}";
     public static final String USERS_URL = "users";
     public static final String USER_ID_ORDERS_URL = "users/{id}/orders";
+
+    public static final String SEARCH_REQUEST_URL ="?q=";
+    public static final String SEARCH_REQUEST_PARAMETERS_URL ="&fields=first_publish_year,availability&limit=1";
 }
 
 
