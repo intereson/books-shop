@@ -37,7 +37,7 @@ public class RoleServiceImpl implements RoleService {
     @Transactional(readOnly = true)
     public Role getRole(Long roleId) {
         return roleRepository.findById(roleId)
-                .orElseThrow(() -> new EntityNotFoundException(roleId.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(roleId));
     }
 
     @Override
@@ -60,12 +60,11 @@ public class RoleServiceImpl implements RoleService {
         return roleListMapper.mapListToDto(roles);
     }
 
-
     @Override
     @Transactional(isolation = SERIALIZABLE)
     public RoleResponse updateRole(Long roleId, CreateAndUpdateRoleRequest request) {
-        Role role = getRole(roleId);
-        role.setRoleName(request.getRoleName());
+        Role role = roleMapper.mapToEntity(request);
+        role.setId(roleId);
         roleRepository.save(role);
         return roleMapper.mapToDto(role);
     }

@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static by.intereson.ebookservice.utils.Constants.START_SUM_PRICE;
+import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Service
@@ -35,6 +36,18 @@ public class OrderServiceImpl implements OrderService {
     private final BookService bookService;
 
     @Override
+    @Transactional(isolation = READ_COMMITTED)
+    public OrderResponse createOrder(CreateOrderRequest request) {
+        ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(request.getUserId());
+        if (shoppingCart.getDetails().isEmpty()) {
+            throw new ShoppingCartIsEmptyException(request.getUserId());
+        }
+        Order order = creatingOrder(request, shoppingCart);
+        orderRepository.save(order);
+        return orderMapper.mapToDto(order);
+    }
+
+    @Override
     public List<OrderResponse> getOrdersByStatus(GetOrdersByStatus request) {
         List<Order> orders = orderRepository.getOrdersByOrderStatus(request.getOrderStatus());
         return orderListMapper.mapToDto(orders);
@@ -45,24 +58,6 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderRepository
                 .findOrdersByStatusAndSumPriceMoreRequestPrice(request.getOrderStatus(), request.getPrice());
         return orderListMapper.mapToDto(orders);
-    }
-
-    @Override
-    @Transactional(isolation = SERIALIZABLE)
-    public OrderResponse createOrder(CreateOrderRequest request) {
-        ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(request.getUserId());
-        if (shoppingCart.getDetails().isEmpty()) {
-            throw new ShoppingCartIsEmptyException(request.getUserId());
-        }
-        Order order = new Order();
-        List<OrderDetail> details = shoppingCart.getDetails();
-        order.setSumPrice(getSumPrice(details, order));
-        order.setOrderStatus(OrderStatus.NEW);
-        order.setUser(shoppingCart.getUser());
-        shoppingCart.setSumPrice(START_SUM_PRICE);
-        shoppingCartService.cleanSumPriceInShoppingCart(request.getUserId());
-        orderRepository.save(order);
-        return orderMapper.mapToDto(order);
     }
 
     @Override
@@ -97,7 +92,6 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse updateOrderStatus(Long orderId, UpdateOrderStatusRequest request) {
         Order order = getOrder(orderId);
         order.setOrderStatus(request.getStatus());
-        orderRepository.save(order);
         return orderMapper.mapToDto(order);
     }
 
@@ -110,7 +104,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrdersColumnUserId(List<Order> orders) {
         orders.forEach(order -> order.setUser(null));
-        orderRepository.saveAll(orders);
     }
 
     private BigDecimal getSumPrice(List<OrderDetail> parts, Order order) {
@@ -123,5 +116,16 @@ public class OrderServiceImpl implements OrderService {
             bookService.reduceFromReserveQuantityBook(varPart.getBook(), quantity);
         }
         return sum;
+    }
+
+    private Order creatingOrder(CreateOrderRequest request, ShoppingCart shoppingCart) {
+        Order order = new Order();
+        List<OrderDetail> details = shoppingCart.getDetails();
+        order.setSumPrice(getSumPrice(details, order));
+        order.setOrderStatus(OrderStatus.NEW);
+        order.setUser(shoppingCart.getUser());
+        shoppingCart.setSumPrice(START_SUM_PRICE);
+        shoppingCartService.cleanSumPriceInShoppingCart(request.getUserId());
+        return order;
     }
 }

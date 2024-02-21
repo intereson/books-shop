@@ -13,7 +13,17 @@ import java.util.List;
 import static by.intereson.ebookservice.utils.Constants.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
-
+/**
+ * The order part class is an object that contains a purchase that consists of a book and a quantity.
+ * When creating a request, the shopping cart id, book id and quantity are required.
+ * When creating an object, the total cost of the object is calculated and the total cost is added
+ * to the shopping cart, also the number of books in the basket fall into the reserved state
+ * and are subtracted from the amount available, when deleted, respectively,
+ * the decrease in the cost in the shopping cart and from the reserve books fall into the amount available
+ * When the basket is cleared, objects are deleted from the database, the quantities in reserve
+ * and in stock are recalculated, and when placing an order, they are saved, removed from the reserve
+ * and the shopping cart is cleared
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_URL)

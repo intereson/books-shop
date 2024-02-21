@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static by.intereson.ebookservice.utils.Constants.*;
 import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -19,16 +20,15 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "SHOPPING_CARTS")
+@Table(name = SHOPPING_CARTS)
 public class ShoppingCart {
-    private static final String SEQ_NAME = "SHOPPING_CART_SEQ";
-
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1, initialValue = 100)
+    @GeneratedValue(strategy = SEQUENCE, generator = SHOPPING_CART_SEQ_NAME)
+    @SequenceGenerator(name = SHOPPING_CART_SEQ_NAME, sequenceName = SHOPPING_CART_SEQ_NAME,
+            allocationSize = 1, initialValue = 100)
     private Long id;
 
-    @Column(name = "SUM_PRICE")
+    @Column(name = SUM_PRICE)
     private BigDecimal sumPrice;
 
     @OneToMany(cascade = REMOVE, fetch = EAGER, mappedBy = "shoppingCart")

@@ -11,13 +11,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import static by.intereson.ebookservice.utils.Constants.LOG_REQUEST_PATTERN;
-import static by.intereson.ebookservice.utils.Constants.LOG_RESPONSE_PATTERN;
+import static by.intereson.ebookservice.utils.Constants.*;
 
 @Slf4j
 @Aspect
 @Component
 public class LoggerAspect {
+
+
     @Pointcut("execution(* by.intereson.ebookservice.controllers..*(..))")
     public void pointCut() {
     }
@@ -32,7 +33,7 @@ public class LoggerAspect {
                 servletRequest.getRequestURI());
     }
 
-    @AfterReturning(value = "pointCut()", returning = "response")
+    @AfterReturning(value = "pointCut()", returning = RESPONSE, argNames = "joinPoint,response")
     public void logResponse(JoinPoint joinPoint, Object response) {
         HttpServletRequest servletRequest = getServletRequest();
         log.info(LOG_RESPONSE_PATTERN,

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static by.intereson.ebookservice.utils.Constants.*;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
@@ -14,15 +15,14 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ROLES")
+@Table(name = ROLES)
 public class Role {
-    private static final String SEQ_NAME = "ROLE_SEQ";
-
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1, initialValue = 4)
+    @GeneratedValue(strategy = SEQUENCE, generator = ROLE_SEQ_NAME)
+    @SequenceGenerator(name = ROLE_SEQ_NAME, sequenceName = ROLE_SEQ_NAME,
+            allocationSize = 1, initialValue = 100)
     private Long id;
 
-    @Column(name = "NAME", unique = true, nullable = false)
+    @Column(name = ROLE_NAME, unique = true, nullable = false)
     private String roleName;
 }

@@ -39,18 +39,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         if (!isPresentQuantityBook(book, request.getQuantity())) {
             throw new QuantityException(book.getQuantity());
         }
-        bookService.increaseInReserveQuantityBook(book, request.getQuantity());
-        bookService.reduceFromQuantityBook(book, request.getQuantity());
-        orderDetail.setBook(book);
-        orderDetail.setBookName(book.getBookName());
-        BigDecimal price = book.getPrice();
-        orderDetail.setPrice(price);
-        Integer quantity = request.getQuantity();
-        BigDecimal sumPrise = price.multiply(BigDecimal.valueOf(quantity));
-        orderDetail.setSumPrice(sumPrise);
-        orderDetail.setQuantity(quantity);
-        ShoppingCart shoppingCart = shoppingCartService.addSumPriceInShoppingCart(request.getShoppingCartId(), sumPrise);
-        orderDetail.setShoppingCart(shoppingCart);
+        creatingOrderDetail(request, orderDetail, book);
         orderDetailRepository.save(orderDetail);
         return orderDetailMapper.mapToDto(orderDetail);
     }
@@ -81,17 +70,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     @Transactional(isolation = SERIALIZABLE)
     public OrderDetailResponse updateOrderDetail(Long orderDetailId, UpdateOrderDetailRequest request) {
+        OrderDetail orderDetail = getOrderDetail(orderDetailId);
         Integer newQuantity = request.getQuantity();
-        OrderDetail oldOrderDetail = getOrderDetail(orderDetailId);
-        int differenceQuantity = request.getQuantity() - oldOrderDetail.getQuantity();
-        bookService.reduceFromQuantityBook(oldOrderDetail.getBook(), differenceQuantity);
-        bookService.increaseInReserveQuantityBook(oldOrderDetail.getBook(), differenceQuantity);
-        BigDecimal price = oldOrderDetail.getPrice();
-        BigDecimal sumPrice = price.multiply(BigDecimal.valueOf(newQuantity));
-        oldOrderDetail.setSumPrice(sumPrice);
-        oldOrderDetail.setQuantity(newQuantity);
-        orderDetailRepository.save(oldOrderDetail);
-        return orderDetailMapper.mapToDto(oldOrderDetail);
+        updatingOrderDetail(request, orderDetail, newQuantity);
+        return orderDetailMapper.mapToDto(orderDetail);
     }
 
     @Override
@@ -117,6 +99,21 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         shoppingCartService.cleanSumPriceInShoppingCart(shoppingCartId);
     }
 
+    private void creatingOrderDetail(CreateOrderDetailRequest request, OrderDetail orderDetail, Book book) {
+        bookService.increaseInReserveQuantityBook(book, request.getQuantity());
+        bookService.reduceFromQuantityBook(book, request.getQuantity());
+        orderDetail.setBook(book);
+        orderDetail.setBookName(book.getBookName());
+        BigDecimal price = book.getPrice();
+        orderDetail.setPrice(price);
+        Integer quantity = request.getQuantity();
+        BigDecimal sumPrise = price.multiply(BigDecimal.valueOf(quantity));
+        orderDetail.setSumPrice(sumPrise);
+        orderDetail.setQuantity(quantity);
+        ShoppingCart shoppingCart = shoppingCartService.addSumPriceInShoppingCart(request.getShoppingCartId(), sumPrise);
+        orderDetail.setShoppingCart(shoppingCart);
+    }
+
     private void updateQuantityBookAndReserveBookWhenDeletingPartOfTheOrder(OrderDetail detail) {
         Integer quantity = detail.getQuantity();
         Book book = detail.getBook();
@@ -126,5 +123,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     private boolean isPresentQuantityBook(Book book, Integer quantity) {
         return book.getQuantity() >= quantity;
+    }
+    private void updatingOrderDetail(UpdateOrderDetailRequest request, OrderDetail orderDetail, Integer newQuantity) {
+        int differenceQuantity = request.getQuantity() - orderDetail.getQuantity();
+        bookService.reduceFromQuantityBook(orderDetail.getBook(), differenceQuantity);
+        bookService.increaseInReserveQuantityBook(orderDetail.getBook(), differenceQuantity);
+        BigDecimal price = orderDetail.getPrice();
+        BigDecimal sumPrice = price.multiply(BigDecimal.valueOf(newQuantity));
+        orderDetail.setSumPrice(sumPrice);
+        orderDetail.setQuantity(newQuantity);
     }
 }

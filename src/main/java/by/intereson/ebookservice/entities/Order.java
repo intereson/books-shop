@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static by.intereson.ebookservice.utils.Constants.*;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -23,34 +24,32 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ORDERS")
+@Table(name = ORDERS)
 public class Order {
-    private static final String SEQ_NAME = "ORDER_SEQ";
-
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
+    @GeneratedValue(strategy = SEQUENCE, generator = ORDER_SEQ_NAME)
+    @SequenceGenerator(name = ORDER_SEQ_NAME, sequenceName = ORDER_SEQ_NAME,
+            allocationSize = 1, initialValue = 100)
     private Long id;
 
     @CreationTimestamp
-    @Column(name = "CREATE_DATE_TIME")
+    @Column(name = CREATE_DATE_TIME)
     private LocalDateTime createDateTime;
 
     @UpdateTimestamp
-    @Column(name = "UPDATE_DATE_TIME")
+    @Column(name = UPDATE_DATE_TIME)
     private LocalDateTime updateDateTime;
 
     @Enumerated(STRING)
     private OrderStatus orderStatus;
 
-    @Column(name = "SUM_PRICE")
+    @Column(name = SUM_PRICE)
     private BigDecimal sumPrice;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = USER_ID)
     private User user;
 
     @OneToMany(mappedBy = "order", fetch = EAGER, orphanRemoval = true)
     private List<OrderDetail> details;
-
 }

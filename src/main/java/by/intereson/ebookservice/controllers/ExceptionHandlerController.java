@@ -1,6 +1,7 @@
 package by.intereson.ebookservice.controllers;
 
 import by.intereson.ebookservice.dto.response.ErrorResponse;
+import by.intereson.ebookservice.exceptions.OpenLibraryException;
 import by.intereson.ebookservice.exceptions.QuantityException;
 import by.intereson.ebookservice.exceptions.ShoppingCartIsEmptyException;
 import jakarta.persistence.EntityNotFoundException;
@@ -57,6 +58,18 @@ public class ExceptionHandlerController {
                 .message(messageSource.getMessage(QUANTITY_FAIL_KEY,
                         new Object[]{exception.getMessage()},
                         DEFAULT_QUANTITY_FAIL_MESSAGE,
+                        LocaleContextHolder.getLocale()))
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(OpenLibraryException.class)
+    public ErrorResponse handleOpenLibraryException(OpenLibraryException exception) {
+        log.error(HANDLER_EXCEPTION_PATTERN, exception.getMessage());
+        return ErrorResponse.builder()
+                .message(messageSource.getMessage(OPEN_LIBRARY_FAIL_KEY,
+                        new Object[]{exception.getMessage()},
+                        OPEN_LIBRARY_FAIL_MESSAGE,
                         LocaleContextHolder.getLocale()))
                 .build();
     }

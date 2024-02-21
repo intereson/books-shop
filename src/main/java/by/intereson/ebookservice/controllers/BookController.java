@@ -2,6 +2,7 @@ package by.intereson.ebookservice.controllers;
 
 import by.intereson.ebookservice.dto.requests.CreateBookRequest;
 import by.intereson.ebookservice.dto.requests.GetBooksByGenreRequest;
+import by.intereson.ebookservice.dto.requests.UpdateBookRequest;
 import by.intereson.ebookservice.dto.response.BookResponse;
 import by.intereson.ebookservice.services.BookService;
 import jakarta.validation.Valid;
@@ -61,7 +62,7 @@ public class BookController {
      */
     @PutMapping(BOOKS_ID_URL)
     @ResponseStatus
-    public BookResponse updateBook(@PathVariable Long id, @RequestBody @Valid CreateBookRequest request) {
+    public BookResponse updateBook(@PathVariable Long id, @RequestBody @Valid UpdateBookRequest request) {
         return bookService.updateBook(id, request);
     }
 

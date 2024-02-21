@@ -19,15 +19,15 @@ import static by.intereson.ebookservice.utils.Constants.SEARCH_REQUEST_URL;
 public class OpenLibraryGateway {
     private final RestTemplate restTemplate;
     private final OpenLibraryGatewayProperties openLibraryGatewayProperties;
-    private String request;
+    private String bookNameRequest;
 
     public OpenLibraryRootResponse getBookInfo() {
-        ResponseEntity<OpenLibraryRootResponse> response = restTemplate.getForEntity(buildRequestUrl(request), OpenLibraryRootResponse.class);
+        ResponseEntity<OpenLibraryRootResponse> response = restTemplate.getForEntity(buildRequestUrl(), OpenLibraryRootResponse.class);
         return response.getBody();
     }
 
-    private String buildRequestUrl(String request) {
+    private String buildRequestUrl() {
         String url = openLibraryGatewayProperties.getUrl();
-        return url + SEARCH_REQUEST_URL + request + SEARCH_REQUEST_PARAMETERS_URL;
+        return url + SEARCH_REQUEST_URL + bookNameRequest + SEARCH_REQUEST_PARAMETERS_URL;
     }
 }

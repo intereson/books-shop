@@ -21,6 +21,7 @@ public interface OrderService {
     List<OrderResponse> getOrders();
 
     List<OrderResponse> getOrdersByStatus(GetOrdersByStatus request);
+
     List<OrderResponse> getOrdersByStatusAndSumMoreThenPrice(GetOrdersByStatusAndMoreThenPrice request);
 
     OrderResponse updateOrderStatus(Long orderId, UpdateOrderStatusRequest request);

@@ -2,10 +2,12 @@ package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreateBookRequest;
 import by.intereson.ebookservice.dto.requests.GetBooksByGenreRequest;
+import by.intereson.ebookservice.dto.requests.UpdateBookRequest;
 import by.intereson.ebookservice.dto.response.BookResponse;
 import by.intereson.ebookservice.dto.response.OpenLibraryResponse;
 import by.intereson.ebookservice.dto.response.OpenLibraryRootResponse;
 import by.intereson.ebookservice.entities.Book;
+import by.intereson.ebookservice.exceptions.OpenLibraryException;
 import by.intereson.ebookservice.exceptions.QuantityException;
 import by.intereson.ebookservice.exceptions.ResourceNotFoundException;
 import by.intereson.ebookservice.gateways.OpenLibraryGateway;
@@ -18,9 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static by.intereson.ebookservice.utils.Constants.START_INTEGER_NULL_INDEX;
 import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
+import static org.springframework.transaction.annotation.Propagation.MANDATORY;
 
 @Service
 @RequiredArgsConstructor
@@ -61,10 +63,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(isolation = SERIALIZABLE)
-    public BookResponse updateBook(Long bookId, CreateBookRequest request) {
-        Book book = bookMapper.mapToEntity(request);
-        getUpdatedBook(bookId, request, book);
-        bookRepository.save(book);
+    public BookResponse updateBook(Long bookId, UpdateBookRequest request) {
+        Book book = getBook(bookId);
+        updateBook(request, book);
         return bookMapper.mapToDto(book);
     }
 
@@ -75,34 +76,30 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(isolation = SERIALIZABLE)
+    @Transactional(propagation = MANDATORY)
     public void increaseInQuantityBook(Book book, Integer quantity) {
         book.setQuantity(book.getQuantity() + quantity);
-        bookRepository.save(book);
     }
 
     @Override
-    @Transactional(isolation = SERIALIZABLE)
+    @Transactional(propagation = MANDATORY)
     public void reduceFromQuantityBook(Book book, Integer quantity) {
-        int differenceQuantity = book.getQuantity() - quantity;
-        if (differenceQuantity < START_INTEGER_NULL_INDEX) {
+        if (quantity > book.getQuantity()) {
             throw new QuantityException(book.getQuantity());
-        } else book.setQuantity(differenceQuantity);
-        bookRepository.save(book);
+        }
+        book.setQuantity(book.getQuantity() - quantity);
     }
 
     @Override
-    @Transactional(isolation = SERIALIZABLE)
+    @Transactional(propagation = MANDATORY)
     public void reduceFromReserveQuantityBook(Book book, Integer quantity) {
         book.setReserveQuantity(book.getReserveQuantity() - quantity);
-        bookRepository.save(book);
     }
 
     @Override
-    @Transactional(isolation = SERIALIZABLE)
+    @Transactional(propagation = MANDATORY)
     public void increaseInReserveQuantityBook(Book book, Integer quantity) {
         book.setReserveQuantity(book.getReserveQuantity() + quantity);
-        bookRepository.save(book);
     }
 
     @Override
@@ -113,23 +110,22 @@ public class BookServiceImpl implements BookService {
     }
 
     private void setFirstPublishYearFromOpenLibrary(Book book) {
-        openLibraryGateway.setRequest(book.getBookName());
+        openLibraryGateway.setBookNameRequest(book.getBookName());
         OpenLibraryRootResponse bookInfo = openLibraryGateway.getBookInfo();
-        OpenLibraryResponse openLibraryResponse = bookInfo.getDocs().stream().findFirst().orElseThrow();
+        OpenLibraryResponse openLibraryResponse = bookInfo.getDocs().stream().findFirst()
+                .orElseThrow(() ->new OpenLibraryException(book.getBookName()));
         Integer firstPublishYear = openLibraryResponse.getFirst_publish_year();
         book.setFirstPublishYear(firstPublishYear);
     }
 
-    private void getUpdatedBook(Long bookId, CreateBookRequest request, Book book) {
-        book.setId(bookId);
-        book.setBookName(book.getBookName());
-        book.setAuthor(book.getAuthor());
-        book.setPublishingYear(book.getPublishingYear());
-        book.setPublishingHouse(book.getPublishingHouse());
-        book.setDescription(book.getDescription());
-        book.setGenre(book.getGenre());
-        book.setPrice(book.getPrice());
-        book.setQuantity(book.getQuantity());
+    private void updateBook(UpdateBookRequest request, Book book) {
+        book.setAuthor(request.getAuthor());
+        book.setPublishingYear(request.getPublishingYear());
+        book.setPublishingHouse(request.getPublishingHouse());
+        book.setDescription(request.getDescription());
+        book.setGenre(request.getGenre());
+        book.setPrice(request.getPrice());
+        book.setQuantity(request.getQuantity());
         book.setReserveQuantity(request.getReserveQuantity());
     }
 }

@@ -16,10 +16,7 @@ import static by.intereson.ebookservice.utils.Constants.MIN_QUANTITY_BOOK;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateBookRequest {
-    @NotBlank
-    private String bookName;
-
+public class UpdateBookRequest {
     @NotBlank
     private String author;
 

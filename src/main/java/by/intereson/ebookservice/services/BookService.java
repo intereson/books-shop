@@ -2,6 +2,7 @@ package by.intereson.ebookservice.services;
 
 import by.intereson.ebookservice.dto.requests.CreateBookRequest;
 import by.intereson.ebookservice.dto.requests.GetBooksByGenreRequest;
+import by.intereson.ebookservice.dto.requests.UpdateBookRequest;
 import by.intereson.ebookservice.dto.response.BookResponse;
 import by.intereson.ebookservice.entities.Book;
 
@@ -18,7 +19,7 @@ public interface BookService {
 
     List<BookResponse> getBooksByGenre(GetBooksByGenreRequest request);
 
-    BookResponse updateBook(Long bookId, CreateBookRequest request);
+    BookResponse updateBook(Long bookId, UpdateBookRequest request);
 
     void deleteBook(Long bookId);
 

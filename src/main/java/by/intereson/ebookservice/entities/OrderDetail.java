@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+import static by.intereson.ebookservice.utils.Constants.*;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
@@ -15,36 +16,35 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ORDER_DETAILS")
+@Table(name = ORDER_DETAILS)
 public class OrderDetail {
-    private static final String SEQ_NAME = "ORDER_DETAIL_SEQ";
-
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = SEQ_NAME)
-    @SequenceGenerator(name = SEQ_NAME, sequenceName = SEQ_NAME, allocationSize = 1)
+    @GeneratedValue(strategy = SEQUENCE, generator = ORDER_DETAIL_SEQ_NAME)
+    @SequenceGenerator(name = ORDER_DETAIL_SEQ_NAME, sequenceName = ORDER_DETAIL_SEQ_NAME,
+            allocationSize = 1, initialValue = 100)
     private Long id;
 
-    @Column(name = "SUM_PRICE")
+    @Column(name = SUM_PRICE)
     private BigDecimal sumPrice;
 
-    @Column(name = "PRICE_BOOK")
+    @Column(name = BOOK_PRICE)
     private BigDecimal price;
 
-    @Column(name = "QUANTITY", nullable = false)
+    @Column(name = QUANTITY, nullable = false)
     private Integer quantity;
 
-    @Column(name = "BOOK_NAME", nullable = false)
+    @Column(name = BOOK_NAME, nullable = false)
     private String bookName;
 
     @ManyToOne
-    @JoinColumn(name = "ORDER_ID")
+    @JoinColumn(name = ORDER_ID)
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "BOOK_ID", nullable = false)
+    @JoinColumn(name = BOOK_ID, nullable = false)
     private Book book;
 
     @ManyToOne
-    @JoinColumn(name = "SHOPPING_CART_ID")
+    @JoinColumn(name = SHOPPING_CART_ID)
     private ShoppingCart shoppingCart;
 }

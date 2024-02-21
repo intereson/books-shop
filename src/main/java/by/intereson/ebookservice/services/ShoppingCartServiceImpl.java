@@ -19,7 +19,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
 
-
     @Override
     @Transactional(readOnly = true)
     public ShoppingCart getShoppingCart(Long shoppingCartId) {
@@ -31,29 +30,33 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void cleanSumPriceInShoppingCart(Long shoppingCartId) {
         ShoppingCart shoppingCart = getShoppingCart(shoppingCartId);
         shoppingCart.setSumPrice(START_SUM_PRICE);
-        shoppingCartRepository.save(shoppingCart);
     }
 
     @Override
     public ShoppingCart addSumPriceInShoppingCart(Long shoppingCartId, BigDecimal sumPriseInPart) {
         ShoppingCart shoppingCart = getShoppingCart(shoppingCartId);
-        BigDecimal shoppingCartSumPrice = shoppingCart.getSumPrice();
-        shoppingCartSumPrice = shoppingCartSumPrice.add(sumPriseInPart);
-        shoppingCart.setSumPrice(shoppingCartSumPrice);
+        shoppingCart.setSumPrice(additionPrice(sumPriseInPart, shoppingCart));
         return shoppingCart;
     }
 
     @Override
     public void delSumPriceFromShoppingCart(Long shoppingCartId, BigDecimal sumPriseInPart) {
         ShoppingCart shoppingCart = getShoppingCart(shoppingCartId);
-        BigDecimal shoppingCartSumPrice = shoppingCart.getSumPrice();
-        shoppingCartSumPrice = shoppingCartSumPrice.subtract(sumPriseInPart);
-        shoppingCart.setSumPrice(shoppingCartSumPrice);
-        shoppingCartRepository.save(shoppingCart);
+        shoppingCart.setSumPrice(subtractionPrice(sumPriseInPart, shoppingCart));
     }
 
     @Override
     public ShoppingCartResponse getShoppingCartResponse(Long shoppingCartId) {
         return shoppingCartMapper.mapToDto(getShoppingCart(shoppingCartId));
+    }
+
+    private BigDecimal additionPrice(BigDecimal sumPriseInPart, ShoppingCart shoppingCart) {
+        BigDecimal shoppingCartSumPrice = shoppingCart.getSumPrice();
+        return shoppingCartSumPrice.add(sumPriseInPart);
+    }
+
+    private BigDecimal subtractionPrice(BigDecimal sumPriseInPart, ShoppingCart shoppingCart) {
+        BigDecimal shoppingCartSumPrice = shoppingCart.getSumPrice();
+        return shoppingCartSumPrice.subtract(sumPriseInPart);
     }
 }
