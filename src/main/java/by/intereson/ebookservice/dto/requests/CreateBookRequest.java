@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-import static by.intereson.ebookservice.utils.Constants.MIN_QUANTITY_BOOK;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

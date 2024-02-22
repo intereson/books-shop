@@ -10,10 +10,11 @@ public class Constants {
     public static final String LOG_RESPONSE_PATTERN = "{}->{}:{}, response {}";
     public static final BigDecimal START_SUM_PRICE = new BigDecimal("0.00");
     public static final Integer START_INTEGER_NULL_INDEX = 0;
-    public static final Integer MIN_QUANTITY_BOOK = 1;
     public static final String ROLE_NEW_USER = "USER";
     public static final String DATE_TIME_PATTERN = "dd.MM.uuuu HH-mm";
     public static final String RESPONSE = "response";
+    public static final String ARG_NAMES_LOG = "joinPoint,response";
+    public static final String OPEN_LIBRARY_PROPERTY = "services.external.library";
     /**
      * EXCEPTIONS
      */
@@ -26,6 +27,10 @@ public class Constants {
     public static final String DEFAULT_QUANTITY_FAIL_MESSAGE = "There is no such amount!";
     public static final String OPEN_LIBRARY_FAIL_KEY = "library.fail.message";
     public static final String OPEN_LIBRARY_FAIL_MESSAGE = "Error receiving data from API Open Library!";
+    public static final String OPEN_LIBRARY_PROPERTY_URL = "services.external.library.url";
+    public static final String BASE_NAME_MESSAGE = "classpath:message";
+    public static final String DEFAULT_ENCODING_MESSAGE = "UTF-8";
+
     /**
      * URL
      */

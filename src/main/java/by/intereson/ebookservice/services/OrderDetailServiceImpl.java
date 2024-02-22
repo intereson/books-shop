@@ -13,7 +13,6 @@ import by.intereson.ebookservice.mappers.OrderDetailMapper;
 import by.intereson.ebookservice.repositories.OrderDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -32,7 +31,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional
     public OrderDetailResponse createOrderDetail(CreateOrderDetailRequest request) {
         OrderDetail orderDetail = orderDetailMapper.mapToEntity(request);
         Book book = bookService.getBook(request.getBookId());
@@ -124,6 +123,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     private boolean isPresentQuantityBook(Book book, Integer quantity) {
         return book.getQuantity() >= quantity;
     }
+
     private void updatingOrderDetail(UpdateOrderDetailRequest request, OrderDetail orderDetail, Integer newQuantity) {
         int differenceQuantity = request.getQuantity() - orderDetail.getQuantity();
         bookService.reduceFromQuantityBook(orderDetail.getBook(), differenceQuantity);

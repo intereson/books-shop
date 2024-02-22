@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static by.intereson.ebookservice.utils.Constants.*;
-import static org.springframework.transaction.annotation.Isolation.*;
+import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final OrderDetailService orderDetailService;
 
     @Override
-    @Transactional(isolation = READ_COMMITTED)
+    @Transactional
     public UserResponse createUser(CreateUserRequest request) {
         User user = userMapper.mapToEntity(request);
         creatingUser(user);
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(isolation = REPEATABLE_READ)
+    @Transactional
     public UserResponse updateBookLike(Long userId, UpdateBookLikeRequest request) {
         User user = getUser(userId);
         boolean noneMatch = user.getLikedBooks().stream()
@@ -77,7 +77,8 @@ public class UserServiceImpl implements UserService {
         if (noneMatch) {
             user.getLikedBooks().add(bookService.getBook(request.getBookId()));
         } else {
-        user.getLikedBooks().remove(bookService.getBook(request.getBookId()));}
+            user.getLikedBooks().remove(bookService.getBook(request.getBookId()));
+        }
         return userMapper.mapToDto(user);
     }
 

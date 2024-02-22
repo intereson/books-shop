@@ -8,11 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.client.RestTemplate;
 
+import static by.intereson.ebookservice.utils.Constants.*;
+
 @Configuration
 public class ApplicationConfig {
 
     @Bean
-    @ConditionalOnProperty(value = "services.external.library.url")
+    @ConditionalOnProperty(value = OPEN_LIBRARY_PROPERTY_URL)
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
@@ -20,8 +22,8 @@ public class ApplicationConfig {
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:message");
-        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasename(BASE_NAME_MESSAGE);
+        messageSource.setDefaultEncoding(DEFAULT_ENCODING_MESSAGE);
         return messageSource;
     }
 

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Service
@@ -26,7 +25,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleListMapper roleListMapper;
 
     @Override
-    @Transactional(isolation = READ_COMMITTED)
+    @Transactional
     public RoleResponse createRole(CreateAndUpdateRoleRequest request) {
         Role role = roleMapper.mapToEntity(request);
         roleRepository.save(role);

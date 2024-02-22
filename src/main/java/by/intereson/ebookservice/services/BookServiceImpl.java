@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 import static org.springframework.transaction.annotation.Propagation.MANDATORY;
 
@@ -33,7 +32,7 @@ public class BookServiceImpl implements BookService {
     private final OpenLibraryGateway openLibraryGateway;
 
     @Override
-    @Transactional(isolation = READ_COMMITTED)
+    @Transactional
     public BookResponse createBook(CreateBookRequest request) {
         Book book = bookMapper.mapToEntity(request);
         setFirstPublishYearFromOpenLibrary(book);
@@ -113,7 +112,7 @@ public class BookServiceImpl implements BookService {
         openLibraryGateway.setBookNameRequest(book.getBookName());
         OpenLibraryRootResponse bookInfo = openLibraryGateway.getBookInfo();
         OpenLibraryResponse openLibraryResponse = bookInfo.getDocs().stream().findFirst()
-                .orElseThrow(() ->new OpenLibraryException(book.getBookName()));
+                .orElseThrow(() -> new OpenLibraryException(book.getBookName()));
         Integer firstPublishYear = openLibraryResponse.getFirst_publish_year();
         book.setFirstPublishYear(firstPublishYear);
     }

@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static by.intereson.ebookservice.utils.Constants.START_SUM_PRICE;
-import static org.springframework.transaction.annotation.Isolation.READ_COMMITTED;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
 @Service
@@ -36,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
     private final BookService bookService;
 
     @Override
-    @Transactional(isolation = READ_COMMITTED)
+    @Transactional
     public OrderResponse createOrder(CreateOrderRequest request) {
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCart(request.getUserId());
         if (shoppingCart.getDetails().isEmpty()) {

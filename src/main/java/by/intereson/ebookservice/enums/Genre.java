@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum Genre {
-    PROGRAMMING,FANTASTIC,FANTASY
+    PROGRAMMING, FANTASTIC, FANTASY
 }
