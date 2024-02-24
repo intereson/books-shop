@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="006-create-users-schema" author="Sergey Lukashonak">
+        <createTable tableName="users">
+            <column name="id"
+                    type="bigint"
+                    autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name"
+                    type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="family"
+                    type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email"
+                    type="varchar(255)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+            <column name="login"
+                    type="varchar(255)">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+            <column name="password"
+                    type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_time" type="datetime"
+                    defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shopping_cart_id"
+                    type="bigint">
+                <constraints nullable="true" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="users" baseColumnNames="shopping_cart_id"
+                                 constraintName="shopping_cart_id_users_id" referencedTableName="shopping_carts"
+                                 referencedColumnNames="id" onUpdate="CASCADE" onDelete="CASCADE"/>
+        <insert tableName="users">
+            <column name="name">Andrey</column>
+            <column name="family">Petrov</column>
+            <column name="email">petrov@gmail.com</column>
+            <column name="login">petrov</column>
+            <column name="password">password</column>
+            <column name="shopping_cart_id">1</column>
+        </insert>
+        <insert tableName="users">
+            <column name="name">Dmitry</column>
+            <column name="family">Ivanov</column>
+            <column name="email">ivanov@gmail.com</column>
+            <column name="login">ivanov</column>
+            <column name="password">password</column>
+            <column name="shopping_cart_id">2</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="009-create-books-schema" author="Sergey Lukashonak">
+        <createTable tableName="books">
+            <column name="id"
+                    type="bigint"
+                    autoIncrement="true">
+                <constraints nullable="false"
+                             unique="true"
+                             primaryKey="true"/>
+            </column>
+            <column name="author"
+                    type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_name"
+                    type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_time" type="datetime"
+                    defaultValueComputed="NOW()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description"
+                    type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="genre"
+                    type="enum ('PROGRAMMING', 'FANTASTIC', 'FANTASY')">
+                <constraints nullable="true"/>
+            </column>
+            <column name="price"
+                    type="decimal(6,2)" >
+                <constraints nullable="true" />
+            </column>
+            <column name="publishing_house"
+                    type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="publishing_year"
+                    type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="first_publish_year"
+                    type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="quantity"
+                    type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reserve_quantity"
+                    type="int">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <insert tableName="books">
+            <column name="author">Анджей Сапковский</column>
+            <column name="book_name">Ведьмак. Последнее желание. Меч предназначения</column>
+            <column name="description">none</column>
+            <column name="genre">FANTASY</column>
+            <column name="price">28.50</column>
+            <column name="publishing_house">none</column>
+            <column name="publishing_year">2020</column>
+            <column name="quantity">10</column>
+            <column name="reserve_quantity">0</column>
+        </insert>
+        <insert tableName="books">
+            <column name="author">Рэй Брэдбери</column>
+            <column name="book_name">451° по Фаренгейту</column>
+            <column name="description">none</column>
+            <column name="genre">FANTASTIC</column>
+            <column name="price">12.80</column>
+            <column name="publishing_house">none</column>
+            <column name="publishing_year">2022</column>
+            <column name="quantity">8</column>
+            <column name="reserve_quantity">0</column>
+        </insert>
+        <insert tableName="books">
+            <column name="author">Харальд Хорф</column>
+            <column name="book_name">Atomic Heart. Предыстория предприятия 3826</column>
+            <column name="description">none</column>
+            <column name="genre">FANTASTIC</column>
+            <column name="price">26.40</column>
+            <column name="publishing_house">none</column>
+            <column name="publishing_year">2023</column>
+            <column name="quantity">40</column>
+            <column name="reserve_quantity">0</column>
+        </insert>
+        <insert tableName="books">
+            <column name="author">Стивен Кинг</column>
+            <column name="book_name">11/22/63</column>
+            <column name="description">none</column>
+            <column name="genre">FANTASTIC</column>
+            <column name="price">20.50</column>
+            <column name="publishing_house">none</column>
+            <column name="publishing_year">2019</column>
+            <column name="quantity">20</column>
+            <column name="reserve_quantity">0</column>
+        </insert>
+        <insert tableName="books">
+            <column name="author">Фрэнк Герберт</column>
+            <column name="book_name">Дюна</column>
+            <column name="description">none</column>
+            <column name="genre">FANTASY</column>
+            <column name="price">30.50</column>
+            <column name="publishing_house">none</column>
+            <column name="publishing_year">2021</column>
+            <column name="quantity">30</column>
+            <column name="reserve_quantity">0</column>
+        </insert>
+        <insert tableName="books">
+            <column name="author">Герберт Шилдт</column>
+            <column name="book_name">Java полное руководство.Десятое издание</column>
+            <column name="description">none</column>
+            <column name="genre">PROGRAMMING</column>
+            <column name="price">25.50</column>
+            <column name="publishing_house">none</column>
+            <column name="publishing_year">2018</column>
+            <column name="quantity">10</column>
+            <column name="reserve_quantity">0</column>
+        </insert>
+        <insert tableName="books">
+            <column name="author">Kathy Sierra, Bert Bates</column>
+            <column name="book_name">Head first Java 2nd Edition</column>
+            <column name="description">none</column>
+            <column name="genre">PROGRAMMING</column>
+            <column name="price">28.00</column>
+            <column name="publishing_house">none</column>
+            <column name="publishing_year">2012</column>
+            <column name="quantity">10</column>
+            <column name="reserve_quantity">0</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
