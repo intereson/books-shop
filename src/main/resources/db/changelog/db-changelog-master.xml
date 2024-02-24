@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <include file="db/changelog/001-create-role-seq-schema.xml"/>
+    <include file="db/changelog/002-create-roles-schema.xml"/>
+    <include file="db/changelog/003-create-shopping-cart-seq-schema.xml"/>
+    <include file="db/changelog/004-create-shopping-carts-schema.xml"/>
+    <include file="db/changelog/005-create-user-seq-schema.xml"/>
+    <include file="db/changelog/006-create-users-schema.xml"/>
+    <include file="db/changelog/007-create-user-role-schema.xml"/>
+    <include file="db/changelog/008-create-book-seq-schema.xml"/>
+    <include file="db/changelog/009-create-books-schema.xml"/>
+    <include file="db/changelog/010-create-user-like-book-schema.xml"/>
+    <include file="db/changelog/011-create-order-seq-schema.xml"/>
+    <include file="db/changelog/012-create-orders-schema.xml"/>
+    <include file="db/changelog/013-create-order-detail-seq-schema.xml"/>
+    <include file="db/changelog/014-create-order-details-schema.xml"/>
+</databaseChangeLog>

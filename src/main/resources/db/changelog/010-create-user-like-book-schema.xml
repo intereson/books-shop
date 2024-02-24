@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+    <changeSet id="010-create-user-like-book-schema" author="Sergey Lukashonak">
+        <createTable tableName="user_like_book">
+            <column name="user_id"
+                    type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="book_id"
+                    type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="user_like_book" baseColumnNames="user_id"
+                                 constraintName="user_like_book_user_id_constraint" referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="user_like_book" baseColumnNames="book_id"
+                                 constraintName="user_like_book_book_id_constraint" referencedTableName="books"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
